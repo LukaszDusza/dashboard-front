@@ -15,6 +15,7 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 //import { MaterialModule } from '@angular/material';
 // -------END ANGULAR MATERIAL--------------
 
+// --------------- DRAWING ------------------------------
 import { NavigationModule } from './modules/navigation/navigation.module';
 import { SnapshotModule } from './modules/snapshot/snapshot.module';
 import { AppRoutingModule } from './app.routing.module';
@@ -53,7 +54,6 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     ReportsModule,
     ChartsModule,
     HttpClientModule,
-    
   //-- ROUTERS --
   AppRoutingModule,
   // -- HTTP --
