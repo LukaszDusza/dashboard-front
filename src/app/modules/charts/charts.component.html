@@ -1,0 +1,78 @@
+
+
+<!-- <div class="container">     -->
+            <div class="row">
+              <div class="col-xs-4">
+                <form class="form-inline">
+                    <input hidden >
+                  <select class="form-control-sm" id="radio"  name="model" [(ngModel)]="model">
+                      <option value="umowa">umowa</option> 
+                      <option value="Umowa anulowana">anulowana</option> 
+                  </select>
+                </form> 
+              </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-4">
+                    <div class="btn">
+                          <button class="btn btn-link btn-sm" (click)="selectToday()">select today</button>
+                          <button class="btn btn-link btn-sm" (click)="selectLastMonth()">select last month</button>
+                          <button class="btn btn-link btn-sm" (click)="selectLastYear()">select last year</button> 
+                    </div>
+                    </div>                    
+                  </div>
+                <div class="row">
+                    <div class="col-xs-4">
+                    <div class="datepicker">
+                        <form class="form-inline" (ngSubmit)="onSubmitCalendar()">
+                            <div class="form-group"> 
+                           
+                              <div class="input-group">
+                                <input class="form-control-sm" placeholder="yyyy-mm-dd"
+                                name="dp1" [(ngModel)]="calendarDp1" ngbDatepicker #d1="ngbDatepicker" (click)="d1.toggle()">
+                              </div>
+                              <div class="input-group">
+                                <input class="form-control-sm" placeholder="yyyy-mm-dd"
+                                name="dp2" [(ngModel)]="calendarDp2" ngbDatepicker #d2="ngbDatepicker" (click)="d2.toggle()">
+                              </div>  
+                              <div class="input-group">
+                                  <div class="btn">
+                                        <button class="btn btn-sm btn-outline-success" type="submit">submit</button>
+                                  </div>
+                                  </div>                                            
+                            </div>                
+                          </form> 
+                    </div>
+                    </div>
+                </div>
+                
+    <div class="row">
+            <div class="selector">
+            <form class="form-inline" [formGroup]="form" (change)="onSubmit()">
+                    <div class="form-group-sm">
+                      <div class="input-group">              
+                        <select class="form-control-sm" id="select" formControlName="select">              
+                          <option *ngFor="let option of options.title" [value]="option">{{option}}</option>   
+                        </select>   
+                        <!-- <button class="btn btn-outline-success" type="submit" value="submit">int time</button> -->
+                      </div>
+                    </div>
+                  </form>
+                  </div>
+    </div>
+
+    <!-- <hr/>
+         <pre>Model: {{ calendarFrom | json}}</pre> -->
+             
+<div class="row">
+    <div class="col-xs-4">
+    <div class="table"> 
+        <google-chart [data]="chart"></google-chart>
+        <google-chart [data]="chartTableSum"></google-chart>
+        <!-- <div class="col-xs-4">Suma: {{total}} zł</div> -->
+      </div>
+      </div>
+</div>
+<!-- </div> -->
+
+
