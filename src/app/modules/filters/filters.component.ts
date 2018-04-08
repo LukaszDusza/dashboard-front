@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, SimpleChanges, Input, OnChanges } from '@angular/core';
 import {NgbDateStruct} from '@ng-bootstrap/ng-bootstrap';
 import { FormGroup, FormControl, FormArray } from '@angular/forms';
 import { MainService } from '../../main-service.service';
@@ -10,13 +10,21 @@ const now = new Date();
   templateUrl: './filters.component.html',
   styleUrls: ['./filters.component.css']
 })
-export class FiltersComponent implements OnInit {
+export class FiltersComponent implements OnChanges, OnInit {
 
   constructor(private mainService?: MainService) { }
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.createForm();
   }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    console.log(changes,"LINK CHANGE!", this.link);
+    
+  }
+
+@Input()
+link: string;
 
    //----------------------------- FORM --------------------
    form: FormGroup;
@@ -70,6 +78,7 @@ selectLastYear() {
   console.log("selectLastYear")
 }
 
+
 onSubmitCalendar() {
   let slash = "/", dateFrom, dateTo, link;
 let agreementSelection = this.agreementOptions();
@@ -93,18 +102,19 @@ let timeSelection = this.timerangeOptions();
     }
     dateFrom = this.calendarDp1.year + "-" + this.calendarDp1.month + "-" + this.calendarDp1.day;
     dateTo = this.calendarDp2.year + "-" + this.calendarDp2.month + "-" + this.calendarDp2.day;
-    link = this.mainService.swichHost + this.mainService.endpoint.byDate + dateFrom + slash + dateTo + slash + agreementSelection;
+    this.link = this.mainService.swichHost + this.mainService.endpoint.byDate + dateFrom + slash + dateTo + slash + agreementSelection;
 
     this.calendarDp1 = null;
     this.calendarDp2 = null;
-  console.log(link);
+  //console.log(link);
+  this.mainService.updateLink(this.link);
 
  } else {
-
   dateFrom = this.calendarDp1.year + "-" + this.calendarDp1.month + "-" + this.calendarDp1.day;
   dateTo = this.calendarDp2.year + "-" + this.calendarDp2.month + "-" + this.calendarDp2.day;    
-  link = this.mainService.swichHost + this.mainService.endpoint.byDate + dateFrom + slash + dateTo + slash + agreementSelection;
-  console.log(link);
+  this.link = this.mainService.swichHost + this.mainService.endpoint.byDate + dateFrom + slash + dateTo + slash + agreementSelection;
+  //console.log(link);
+  this.mainService.updateLink(this.link);
  }
 }
 // ----------- END DATEPICKER ------------------------------

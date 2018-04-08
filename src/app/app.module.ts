@@ -25,6 +25,8 @@ import { MainService } from './main-service.service';
 import { HttpClientModule } from '@angular/common/http';
 import { ChartsModule } from './modules/charts/charts.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { SalesModule } from './modules/sales/sales.module';
+import { UsersModule } from './modules/users/users.module';
 
 
 @NgModule({
@@ -51,6 +53,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     NavigationModule,
     SnapshotModule,
     HomeModule,
+    SalesModule,
+    UsersModule,
     ReportsModule,
     ChartsModule,
     HttpClientModule,

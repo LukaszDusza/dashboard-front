@@ -1,10 +1,14 @@
 
 <app-filters></app-filters>
 <div class="container">
-        <div class="row">
+    <div class="row" *ngIf="!showCharts">
+      <div class="alert alert-warning" role="alert">
+          {{warningMessage}}
+      </div>
+    </div>
+        <div class="row" *ngIf="showCharts">
           <div class="col-xs-3" id="piechart">
-            <google-chart [data]="chart1"></google-chart>
-            
+            <google-chart [data]="chart1"></google-chart>            
           </div>
       
           <div class="col-xs-3" id="piechart">

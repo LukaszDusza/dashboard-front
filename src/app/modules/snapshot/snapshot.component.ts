@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { MainService } from '../../main-service.service';
 import {NgbDateStruct} from '@ng-bootstrap/ng-bootstrap';
+import { HttpErrorResponse } from '@angular/common/http';
+import { FiltersComponent } from '../filters';
 
 const now = new Date();
 
@@ -14,7 +16,15 @@ export class SnapshotComponent implements OnInit {
   constructor(private mainService?: MainService) {
 //this.getSnapshotCharts(mainService.endpoint.byUserSum);
 this.selectLastYear();
-   }
+
+mainService.link$.subscribe( link => {
+console.log(link);
+  this.getSnapshotCharts(link);
+});
+
+}
+
+
 
   ngOnInit() {
    
@@ -29,7 +39,8 @@ this.selectLastYear();
   calendarDp1: NgbDateStruct;
   calendarDp2: NgbDateStruct;
 
-  
+  showCharts = true;
+  warningMessage: string;
 
   selectLastYear() {
     this.calendarDp1 = {year: now.getFullYear() -3, month: now.getMonth() + 1, day: now.getDate()};
@@ -49,7 +60,7 @@ this.getSnapshotCharts(link)
 
   getSnapshotCharts(link) {
     let array = [];
-    this.mainService.getRaportDas(link).subscribe(result => {
+    this.mainService.getRaportDas(link).retry(3).subscribe(result => {
       console.log(result);
       result.map(elem => {  
                
@@ -141,11 +152,20 @@ array.push([
       //  "poziom7knf"
               ])
 
-    }, error => {
-     // console.log("getChartTable:" + error);
+    }, (error: HttpErrorResponse) => {
+      console.log("getChartTable:" + error.status);
     }, () => {
-      console.log(array);
-      this.drawChart(array);
+      console.log(array.length);
+
+      if(array.length >= 2) {
+        this.showCharts = true;
+        this.drawChart(array);       
+        this.warningMessage = null;
+      } else {
+        this.showCharts = false;
+        this.warningMessage = "No results found!";
+      }
+      
     });
   }
 

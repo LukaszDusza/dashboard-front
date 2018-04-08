@@ -6,6 +6,7 @@ import { Ng2GoogleChartsModule } from 'ng2-google-charts';
 import { NgbModule } from "@ng-bootstrap/ng-bootstrap";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { FormGroup, FormControl, FormArray } from '@angular/forms';
+import { FiltersModule } from "../filters/filters.module";
 //import { NgbDatepickerModule } from "@ng-bootstrap/ng-bootstrap";
 //import { OwlDateTimeModule, OwlNativeDateTimeModule } from 'ng-pick-datetime';
 //import { NgDatepickerModule } from 'ng2-datepicker';
@@ -21,7 +22,8 @@ import { FormGroup, FormControl, FormArray } from '@angular/forms';
         Ng2GoogleChartsModule,
         NgbModule,
         FormsModule, 
-        ReactiveFormsModule,      
+        ReactiveFormsModule, 
+        FiltersModule     
       //  NgbDatepickerModule
       //  OwlDateTimeModule,
       //  OwlNativeDateTimeModule,

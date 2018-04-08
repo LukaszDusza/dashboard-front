@@ -14,7 +14,13 @@ const now = new Date();
 
 export class ChartsComponent implements OnInit {
 
-constructor(private mainService?: MainService) { }
+constructor(private mainService?: MainService) {
+
+  mainService.link$.subscribe( link => {
+    console.log(link);
+      this.getChartTable(link);
+    });
+ }
 
   ngOnInit() {
     this.createForm();
@@ -72,7 +78,7 @@ onSubmit() {
       case this.options.title[i]:
         let link = this.options.link[i];
 
-        this.getChartTable(link,this.chartType.table);
+        this.getChartTable(link);
         this.createForm();
         //if(link != this.link) {
           //this.mainService.updateSnapshotChartLink(link);
@@ -120,7 +126,7 @@ onSubmitCalendar() {
     dateFrom = "1900-01-01";
     dateTo = "9999-01-01";
     link = this.mainService.swichHost + this.mainService.endpoint.byDate + dateFrom + slash + dateTo + slash + this.model;
-    this.getChartTable(link,this.chartType.table);
+    this.getChartTable(link);
     console.log(link);
   } else {
     dateFrom = this.calendarDp1.year + "-" + this.calendarDp1.month + "-" + this.calendarDp1.day;
@@ -128,7 +134,7 @@ onSubmitCalendar() {
     link = this.mainService.swichHost + this.mainService.endpoint.byDate + dateFrom + slash + dateTo + slash + this.model;   
   console.log(link);
 
-  this.getChartTable(link,this.chartType.table);
+  this.getChartTable(link);
   }
  }
  
@@ -144,11 +150,11 @@ onSubmitCalendar() {
 
 chart;
 chartTableSum;
-chartType = {
-  table: "Table",
-  pie: "PieChart",
-  column: "ColumnChart"
-}
+// chartType = {
+//   table: "Table",
+//   pie: "PieChart",
+//   column: "ColumnChart"
+// }
 //   getChartTableAll(link) {
 //     let array = [];
 //     this.mainService.getRaportDas(link).subscribe(result => {
@@ -313,7 +319,7 @@ getSumFromTable(array) {
   this.drawChartTableSum(arraySum);
 }
 
-  getChartTable(link,type:string) {
+  getChartTable(link) {
     let array = [];
     this.mainService.getRaportDas(link).subscribe(result => {
     //  console.log(result);

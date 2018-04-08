@@ -3,7 +3,7 @@ import { CommonModule } from "@angular/common";
 import { ReportsComponent} from './reports.component';
 import { ReportsRoutingModule } from "../reports/reports.routing.module";
 import { ChartsModule } from "../charts/charts.module";
-//import { FiltersModule } from "../filters/filters.module";
+import { FiltersModule } from "../filters/filters.module";
 
 
 @NgModule({
@@ -13,8 +13,8 @@ import { ChartsModule } from "../charts/charts.module";
     imports: [       
         CommonModule,             
         ReportsRoutingModule,
-        ChartsModule
-     //   FiltersModule 
+        ChartsModule,
+        FiltersModule 
     ],
     exports: [
         ReportsComponent

@@ -29,8 +29,17 @@ swichHost = this.host.server;
 //---------------- END HOST ---------------------------------------------------
    
 
+
+private link = new Subject<string>();
+link$ = this.link.asObservable();
+
+updateLink(linkUp: string) {
+  this.link.next(linkUp);
+  console.log("New link!",this.link);
+}
+
   getRaportDas(link): Observable<Array<RaportDas>> {   
-      let result = this.http.get<Array<RaportDas>>(link).retry(3);     
+      let result = this.http.get<Array<RaportDas>>(link);     
       return result;
     }
     

@@ -4,6 +4,8 @@ import { NavigationComponent} from './navigation.component';
 import { HomeRoutingModule } from "../home/home.routing.module";
 import { SnapshotRoutingModule } from "../snapshot/snapshot.routing.module";
 import { ReportsModule } from "../reports/reports.module";
+import { SalesModule } from "../sales/sales.module";
+import { UsersModule } from "../users/users.module";
 //import { ChartsModule } from "../charts/charts.module";
 //-- BOOTSTRAP -- 
 
@@ -15,6 +17,8 @@ import { ReportsModule } from "../reports/reports.module";
     imports: [       
         CommonModule,
         HomeRoutingModule,
+        SalesModule,
+        UsersModule,
         SnapshotRoutingModule,
         ReportsModule,
       //  ChartsModule
