@@ -6,7 +6,7 @@ import { HomeComponent } from '../home/index';
 const homeRouting: Routes = [
 
     {
-        path: '',
+        path: 'home',
         component: HomeComponent
     }
 ];

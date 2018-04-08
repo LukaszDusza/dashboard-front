@@ -7,7 +7,7 @@ import { ReportsComponent } from './index';
 const reportsRouting: Routes = [
 
     {
-        path: '',
+        path: 'reports',
         component: ReportsComponent,
        
         

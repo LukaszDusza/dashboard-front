@@ -7,7 +7,7 @@ import { SnapshotComponent } from './index';
 const snapshotRouting: Routes = [
 
     {
-        path: '',
+        path: 'snapshot',
         component: SnapshotComponent,
        
         
