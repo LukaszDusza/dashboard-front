@@ -19,9 +19,11 @@ export class SnapshotComponent implements OnInit {
 //this.startingCharts();
 
 mainService.link$.subscribe( link => {
-  this.getSnapshotCharts(link);
+//  this.getSnapshotCharts(link);
   //charts
-  this.getBarChartAgreementSum(link);
+this.getSnapshotCharts(link);
+this.getBarChartAgreementSum(link);
+this.getBarChartSalesSum(link);
 });
 
 }
@@ -48,7 +50,7 @@ mainService.link$.subscribe( link => {
   startingCharts() {
 this.getSnapshotCharts(this.mainService.defaultLink);
 this.getBarChartAgreementSum(this.mainService.defaultLink);
-this.getBarChartSalesSum(this.mainService.defaultLink)
+this.getBarChartSalesSum(this.mainService.defaultLink);
   }
 
 
@@ -122,7 +124,7 @@ getBarChartAgreementSum(link){
       };
       // ======================== END =======================================
 
-      
+
       // ======================== chart8 =======================================
 getBarChartSalesSum(link){
   let array = [];
@@ -168,6 +170,7 @@ getBarChartSalesSum(link){
            console.log(arraySum);
            this.drawBarChartBySumSales(arraySum);
          }
+
          drawBarChartBySumSales(array){        
             this.chart8 = {
               chartType: "BarChart",
@@ -176,7 +179,8 @@ getBarChartSalesSum(link){
                 animation: {
                   startup: true,
                   duration: 1500,
-                  easing: 'out'
+                  easing: 'out',
+                  
                 },           
                 // chartArea: {
                 //   left:0,top:0,width:'100%',height:'100%'
@@ -189,21 +193,12 @@ getBarChartSalesSum(link){
                     trigger: 'selection',        
                   },                      
                 }
-              }             
+              }  
+             // console.log(array[0][1],array[1][1]);
+             
       };
+      
 // ======================== END =======================================
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
