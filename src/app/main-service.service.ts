@@ -26,6 +26,7 @@ endpoint = {
   byUserSum: "api/raportdas/usersum"
 }
 swichHost = this.host.server;
+defaultLink = this.swichHost + "api/raportdas/date/2017-4-2/2018-4-2/umowa";
 //---------------- END HOST ---------------------------------------------------
    
 
@@ -35,7 +36,7 @@ link$ = this.link.asObservable();
 
 updateLink(linkUp: string) {
   this.link.next(linkUp);
-  console.log("New link!",this.link);
+ console.log(linkUp);
 }
 
   getRaportDas(link): Observable<Array<RaportDas>> {   

@@ -23,6 +23,9 @@ export class FiltersComponent implements OnChanges, OnInit {
     
   }
 
+searchRange:string = null;
+disabledField:boolean = true;
+
 @Input()
 link: string;
 
@@ -118,6 +121,11 @@ let timeSelection = this.timerangeOptions();
  }
 }
 // ----------- END DATEPICKER ------------------------------
+
+onChangeAgreementOptions() {
+  this.disabledField = false;
+  console.log("onChangeAgreementOptions()");
+}
 
 agreementOptions() {
   let agreementSelection;

@@ -150,6 +150,7 @@ onSubmitCalendar() {
 
 chart;
 chartTableSum;
+chartTableAgreemntSum;
 // chartType = {
 //   table: "Table",
 //   pie: "PieChart",
@@ -319,6 +320,23 @@ getSumFromTable(array) {
   this.drawChartTableSum(arraySum);
 }
 
+totalAgreement:number;
+getSumAgreementFromTable(array) {
+  this.totalAgreement = 0;
+  for(let i = 1; i <array.length; i++ ) {
+    this.totalAgreement = this.totalAgreement + array[i][13];
+  //  console.log(array[i][12]);    
+  }
+  let arraySum = [];
+  arraySum.push([this.totalAgreement]);
+  arraySum.unshift(["LICZBA UMÓW"]);
+  console.log(this.totalAgreement);
+  console.log(arraySum);
+  this.drawChartTableAgreementSum(arraySum);
+}
+
+
+
   getChartTable(link) {
     let array = [];
     this.mainService.getRaportDas(link).subscribe(result => {
@@ -420,6 +438,7 @@ array.push([
       console.log(array);
       this.drawChartTable(array);
      this.getSumFromTable(array);
+     this.getSumAgreementFromTable(array);
     });
   }
 
@@ -514,6 +533,40 @@ array.push([
       }
     };
   } 
+
+  drawChartTableAgreementSum(arraySum){
+    this.chartTableAgreemntSum = {
+      chartType: "Table",
+      dataTable: arraySum,
+      formatters: [
+        {
+          columns: [0],
+          type: 'NumberFormat',
+          options: {
+            fractionDigits: 0, decimalSymbol: '.', groupingSymbol: ' '           
+          }
+        }       
+      ],
+      options: {      
+        width: '100%',
+        height: '100%',
+        showRowNumber: false,
+        allowHtml: true,
+       // 'title': "example", 
+       // page: 'event', 
+      //  pageSize: 3, 
+       // pagingButtons:'30',        
+        cssClassNames: {
+          headerCell: 'headerSum',
+          tableRow: 'cellSum',
+          oddTableRow:'cellSum',
+          headerRow:'headerrowSum'
+        }
+      }
+    };
+  }
+
+
 // ----------------------- END GOOGLE CHARTS -----------------------------------------------
 
 

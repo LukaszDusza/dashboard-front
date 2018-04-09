@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input, SimpleChange, OnChanges, SimpleChanges } from '@angular/core';
 import { MainService } from '../../main-service.service';
 import {NgbDateStruct} from '@ng-bootstrap/ng-bootstrap';
 import { HttpErrorResponse } from '@angular/common/http';
@@ -14,20 +14,21 @@ const now = new Date();
 export class SnapshotComponent implements OnInit {
 
   constructor(private mainService?: MainService) {
-//this.getSnapshotCharts(mainService.endpoint.byUserSum);
-this.selectLastYear();
+
+
+//this.startingCharts();
 
 mainService.link$.subscribe( link => {
-console.log(link);
   this.getSnapshotCharts(link);
+  //charts
+  this.getBarChartAgreementSum(link);
 });
 
 }
 
 
-
-  ngOnInit() {
-   
+  ngOnInit(): void { 
+    this.startingCharts();
   }
 
   chart1;
@@ -36,27 +37,175 @@ console.log(link);
   chart4;
   chart5;
   chart6;
+  chart7;
+  chart8;
   calendarDp1: NgbDateStruct;
   calendarDp2: NgbDateStruct;
 
   showCharts = true;
   warningMessage: string;
 
-  selectLastYear() {
-    this.calendarDp1 = {year: now.getFullYear() -3, month: now.getMonth() + 1, day: now.getDate()};
-    this.calendarDp2 = {year: now.getFullYear(), month: now.getMonth() + 1, day: now.getDate()};
-    
-
-    let dateFrom = this.calendarDp1.year + "-" + this.calendarDp1.month + "-" + this.calendarDp1.day;
-    let dateTo = this.calendarDp2.year + "-" + this.calendarDp2.month + "-" + this.calendarDp2.day;
-
-let slash = "/";
-let link = this.mainService.swichHost + this.mainService.endpoint.byDate + dateFrom + slash + dateTo + slash + "umowa";
-console.log(link);
-
-this.getSnapshotCharts(link)
-
+  startingCharts() {
+this.getSnapshotCharts(this.mainService.defaultLink);
+this.getBarChartAgreementSum(this.mainService.defaultLink);
+this.getBarChartSalesSum(this.mainService.defaultLink)
   }
+
+
+// ============================== chart7 ======================================
+getBarChartAgreementSum(link){
+  let array = [];
+  this.mainService.getRaportDas(link).retry(3).subscribe(result => {
+    console.log(result);
+    result.map(elem => { 
+      array.push([
+        "",       
+         elem.numberOfContract,        
+       ])
+             });
+             array.unshift([ 
+               "",            
+                "Liczba umów"            
+                     ])     
+           }, (error: HttpErrorResponse) => {
+             console.log(error.status);
+           }, () => {
+             console.log(array.length);       
+             if(array.length >= 2) {
+               console.log(array);
+               this.showCharts = true;
+               this.getSumAgreementFromTable(array);
+               //this.drawBarChartBySumAgreement(array);       
+               this.warningMessage = null;
+             } else {
+               this.showCharts = false;
+               this.warningMessage = "No results found!";
+             }    
+           });
+         }
+         totalSales:number;
+         getSumAgreementFromTable(array) {
+           this.totalSales = 0;
+           for(let i = 1; i <array.length; i++ ) {
+             this.totalSales = this.totalSales + array[i][1];
+           //  console.log(array[i][12]);    
+           }
+           let arraySum = [];
+           arraySum.push(["",this.totalSales]);
+           arraySum.unshift(["","LICZBA UMÓW"]);
+           console.log(this.totalSales);
+           console.log(arraySum);
+           this.drawBarChartBySumAgreement(arraySum);
+         }
+         drawBarChartBySumAgreement(array){        
+            this.chart7 = {
+              chartType: "BarChart",
+              dataTable: array,     
+              options: { 
+                animation: {
+                  startup: true,
+                  duration: 1500,
+                  easing: 'out'
+                },           
+                // chartArea: {
+                //   left:0,top:0,width:'100%',height:'100%'
+                // },
+                  legend: {
+                   position: 'top'
+                  },
+                  tooltip: {
+                    isHtml: true,
+                    trigger: 'selection',        
+                  },                      
+                }
+              }             
+      };
+      // ======================== END =======================================
+
+      
+      // ======================== chart8 =======================================
+getBarChartSalesSum(link){
+  let array = [];
+  this.mainService.getRaportDas(link).retry(3).subscribe(result => {
+    console.log(result);
+    result.map(elem => { 
+      array.push([
+        "",       
+         elem.skladka,        
+       ])
+             });
+             array.unshift([ 
+               "",            
+                "Sprzedaż"            
+                     ])
+       
+           }, (error: HttpErrorResponse) => {
+             console.log(error.status);
+           }, () => {
+             console.log(array.length);
+       
+             if(array.length >= 2) {
+               console.log(array);
+               this.showCharts = true;
+               this.getSumSales(array);                     
+               this.warningMessage = null;
+             } else {
+               this.showCharts = false;
+               this.warningMessage = "No results found!";
+             }    
+           });
+         }        
+         getSumSales(array) {
+           let totalSales = 0;
+           for(let i = 1; i <array.length; i++ ) {
+             totalSales = totalSales + array[i][1];
+           //  console.log(array[i][12]);    
+           }
+           let arraySum = [];
+           arraySum.push(["",totalSales]);
+           arraySum.unshift(["","SPRZEDAŻ"]);
+           console.log(totalSales);
+           console.log(arraySum);
+           this.drawBarChartBySumSales(arraySum);
+         }
+         drawBarChartBySumSales(array){        
+            this.chart8 = {
+              chartType: "BarChart",
+              dataTable: array,     
+              options: { 
+                animation: {
+                  startup: true,
+                  duration: 1500,
+                  easing: 'out'
+                },           
+                // chartArea: {
+                //   left:0,top:0,width:'100%',height:'100%'
+                // },
+                  legend: {
+                   position: 'top'
+                  },
+                  tooltip: {
+                    isHtml: true,
+                    trigger: 'selection',        
+                  },                      
+                }
+              }             
+      };
+// ======================== END =======================================
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
   getSnapshotCharts(link) {
     let array = [];
@@ -164,8 +313,7 @@ array.push([
       } else {
         this.showCharts = false;
         this.warningMessage = "No results found!";
-      }
-      
+      }    
     });
   }
 
@@ -296,10 +444,34 @@ array.push([
                       9: {offset: 0.1},
                     }                          
                   }
-                }
-
-
+                }         
 };
+chart7BarChart(array){
+  this.chart7 = {
+    chartType: "BarChart",
+    dataTable: array,     
+    options: { 
+      animation: {
+        startup: true,
+        duration: 1500,
+        easing: 'out'
+      },           
+      // chartArea: {
+      //   left:0,top:0,width:'100%',height:'100%'
+      // },
+        legend: {
+         position: 'top'
+        },
+        tooltip: {
+          isHtml: true,
+          trigger: 'selection',        
+        },                      
+      }
+    }
+}
+
+
+
   }
   
  
