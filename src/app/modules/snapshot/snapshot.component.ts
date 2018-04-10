@@ -24,10 +24,11 @@ mainService.link$.subscribe( link => {
 this.getSnapshotCharts(link);
 this.getBarChartAgreementSum(link);
 this.getBarChartSalesSum(link);
+this.getPieChart9(link,"Nazwa Produktu", "Składka");
+this.getPieChart10(link, "Rodzaj platności", "Składka");
 });
 
 }
-
 
   ngOnInit(): void { 
     this.startingCharts();
@@ -41,6 +42,8 @@ this.getBarChartSalesSum(link);
   chart6;
   chart7;
   chart8;
+  chart9;
+  chart10;
   calendarDp1: NgbDateStruct;
   calendarDp2: NgbDateStruct;
 
@@ -48,16 +51,19 @@ this.getBarChartSalesSum(link);
   warningMessage: string;
 
   startingCharts() {
-this.getSnapshotCharts(this.mainService.defaultLink);
-this.getBarChartAgreementSum(this.mainService.defaultLink);
-this.getBarChartSalesSum(this.mainService.defaultLink);
+    
+this.getSnapshotCharts(this.mainService.default);
+this.getBarChartAgreementSum(this.mainService.default);
+this.getBarChartSalesSum(this.mainService.default);
+this.getPieChart9("2008-4-3/2018-4-3/umowa","Nazwa Produktu", "Składka");
+this.getPieChart10("2008-4-3/2018-4-3/umowa", "Rodzaj platności", "Składka");
   }
 
 
 // ============================== chart7 ======================================
 getBarChartAgreementSum(link){
   let array = [];
-  this.mainService.getRaportDas(link).retry(3).subscribe(result => {
+  this.mainService.getRaportDasByDate(link).retry(3).subscribe(result => {
     console.log(result);
     result.map(elem => { 
       array.push([
@@ -128,7 +134,7 @@ getBarChartAgreementSum(link){
       // ======================== chart8 =======================================
 getBarChartSalesSum(link){
   let array = [];
-  this.mainService.getRaportDas(link).retry(3).subscribe(result => {
+  this.mainService.getRaportDasByDate(link).retry(3).subscribe(result => {
     console.log(result);
     result.map(elem => { 
       array.push([
@@ -201,10 +207,126 @@ getBarChartSalesSum(link){
 // ======================== END =======================================
 
 
+// ======================== chart9 =======================================
+getPieChart9(link, firstHeader, secondHeader){
+  console.log("getPieChart9()");
+  let array = [];  
+  this.mainService.getRaportDasByProduct(link).retry(2).subscribe(result => {
+  //  console.log(result);
+    result.map(elem => {      
+      array.push([               
+         elem.nazwaProduktu,
+         elem.skladka        
+       ])
+             });
+             array.unshift([                         
+              firstHeader,
+              secondHeader
+                     ])     
+           }, (error: HttpErrorResponse) => {
+              console.log("getPieChart()", error.status);
+           }, () => {
+             console.log("array lenth",array.length);
+       
+             if(array.length >= 2) {
+               console.log(array);
+               this.showCharts = true;              
+               this.drawChart9(array);             
+               this.warningMessage = null;
+             } else {
+               this.showCharts = false;
+               this.warningMessage = "No results found!";
+             }    
+           });
+         }                 
+         drawChart9(array){        
+            this.chart9 = {
+              chartType: "PieChart",
+                dataTable: array,     
+                options: {            
+                  // chartArea: {
+                  //   left:0,top:0,width:'100%',height:'100%'
+                  // },
+                    legend: {
+                     position: 'right'
+                    },
+                    tooltip: {
+                      isHtml: true,
+                      trigger: 'selection',        
+                    },
+                    slices: {
+                      1: {offset: 0.1},
+                      10: {offset: 0.1},
+                      9: {offset: 0.1},
+                    }                          
+                  }
+                } 
+      };     
+// ======================== END =======================================
+
+
+// ======================== chart10 =======================================
+getPieChart10(link, firstHeader, secondHeader){
+  console.log("getPieChart10()");
+  let array = [];  
+  this.mainService.getRaportDasByPayment(link).retry(2).subscribe(result => {
+  //  console.log(result);
+    result.map(elem => {      
+      array.push([               
+         elem.platnosc,
+         elem.skladka        
+       ])
+             });
+             array.unshift([                         
+              firstHeader,
+              secondHeader
+                     ])     
+           }, (error: HttpErrorResponse) => {
+              console.log("getPieChart()", error.status);
+           }, () => {
+             console.log("array lenth",array.length);
+       
+             if(array.length >= 2) {
+               console.log(array);
+               this.showCharts = true;              
+               this.drawChart10(array);             
+               this.warningMessage = null;
+             } else {
+               this.showCharts = false;
+               this.warningMessage = "No results found!";
+             }    
+           });
+         }                 
+         drawChart10(array){        
+            this.chart10 = {
+              chartType: "PieChart",
+                dataTable: array,     
+                options: {            
+                  // chartArea: {
+                  //   left:0,top:0,width:'100%',height:'100%'
+                  // },
+                    legend: {
+                     position: 'right'
+                    },
+                    tooltip: {
+                      isHtml: true,
+                      trigger: 'selection',        
+                    },
+                    slices: {
+                      1: {offset: 0.1},
+                      10: {offset: 0.1},
+                      9: {offset: 0.1},
+                    }                          
+                  }
+                } 
+      };     
+// ======================== END =======================================
+
+
 
   getSnapshotCharts(link) {
     let array = [];
-    this.mainService.getRaportDas(link).retry(3).subscribe(result => {
+    this.mainService.getRaportDasByDate(link).retry(3).subscribe(result => {
       console.log(result);
       result.map(elem => {  
                
@@ -376,7 +498,7 @@ array.push([
           }
 
           this.chart4 = {
-            chartType: "ScatterChart",
+            chartType: "PieChart",
             dataTable: array,     
             options: {      
               animation: {
@@ -398,7 +520,7 @@ array.push([
             }
 
             this.chart5 = {
-              chartType: "LineChart",
+              chartType: "ColumnChart",
               dataTable: array,     
               options: { 
                 animation: {

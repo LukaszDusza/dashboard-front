@@ -339,7 +339,7 @@ getSumAgreementFromTable(array) {
 
   getChartTable(link) {
     let array = [];
-    this.mainService.getRaportDas(link).subscribe(result => {
+    this.mainService.getRaportDasByDate(link).subscribe(result => {
     //  console.log(result);
       result.map(elem => {  
                

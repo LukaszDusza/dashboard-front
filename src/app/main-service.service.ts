@@ -16,38 +16,47 @@ export class MainService {
 
 
 //---------------- HOST  ----------------------------------------------------------
+
 host = {
   localhost: "http://localhost:8080/",
   server: "http://89.67.215.18:11780/dashboard-0.0.1-SNAPSHOT/"
 }
-endpoint = {
-  byDate: "api/raportdas/date/",
-  allData: "api/raportdas/all",
-  byUserSum: "api/raportdas/usersum"
-}
 swichHost = this.host.server;
-defaultLink = this.swichHost + "api/raportdas/date/2017-4-2/2018-4-2/umowa";
+endpoint = {
+  byDate:"api/raportdas/date/",
+  allData:"api/raportdas/all",
+  byUserSum:"api/raportdas/usersum",
+  byProduct:"api/raportdas/product/",
+  byPayment:"api/raportdas/payment/"
+}
+default = "2017-4-2/2018-4-2/umowa";
 //---------------- END HOST ---------------------------------------------------
-   
-
 
 private link = new Subject<string>();
 link$ = this.link.asObservable();
 
-updateLink(linkUp: string) {
+updateLinks(linkUp: string) {
   this.link.next(linkUp);
  console.log(linkUp);
 }
 
-  getRaportDas(link): Observable<Array<RaportDas>> {   
-      let result = this.http.get<Array<RaportDas>>(link);     
+  getRaportDasByDate(link): Observable<Array<RaportDas>> {     
+    let endpointLink = this.swichHost + this.endpoint.byDate + link;  
+      let result = this.http.get<Array<RaportDas>>(endpointLink);     
       return result;
     }
-    
-    // getRaportDasBySum(link): Observable<Array<RaportDas>> {   
-    //   let result = this.http.get<Array<RaportDas>>(link).retry(3);     
-    //   return result;
-    // } 
+
+    getRaportDasByProduct(link): Observable<Array<RaportDas>> { 
+      let endpointLink = this.swichHost + this.endpoint.byProduct + link;  
+        let result = this.http.get<Array<RaportDas>>(endpointLink);     
+        return result;
+      } 
+
+      getRaportDasByPayment(link): Observable<Array<RaportDas>> { 
+        let endpointLink = this.swichHost + this.endpoint.byPayment + link;  
+          let result = this.http.get<Array<RaportDas>>(endpointLink);     
+          return result;
+        } 
 }
 
 export interface RaportDas {

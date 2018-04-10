@@ -105,19 +105,20 @@ let timeSelection = this.timerangeOptions();
     }
     dateFrom = this.calendarDp1.year + "-" + this.calendarDp1.month + "-" + this.calendarDp1.day;
     dateTo = this.calendarDp2.year + "-" + this.calendarDp2.month + "-" + this.calendarDp2.day;
-    this.link = this.mainService.swichHost + this.mainService.endpoint.byDate + dateFrom + slash + dateTo + slash + agreementSelection;
+   // this.link = this.mainService.swichHost + this.mainService.endpoint.byDate + dateFrom + slash + dateTo + slash + agreementSelection;
+    this.link = dateFrom + slash + dateTo + slash + agreementSelection;
 
     this.calendarDp1 = null;
     this.calendarDp2 = null;
-  //console.log(link);
-  this.mainService.updateLink(this.link);
+  console.log(link);
+  this.mainService.updateLinks(this.link);
 
  } else {
   dateFrom = this.calendarDp1.year + "-" + this.calendarDp1.month + "-" + this.calendarDp1.day;
   dateTo = this.calendarDp2.year + "-" + this.calendarDp2.month + "-" + this.calendarDp2.day;    
-  this.link = this.mainService.swichHost + this.mainService.endpoint.byDate + dateFrom + slash + dateTo + slash + agreementSelection;
-  //console.log(link);
-  this.mainService.updateLink(this.link);
+  this.link = dateFrom + slash + dateTo + slash + agreementSelection;
+  console.log(link);
+  this.mainService.updateLinks(this.link);
  }
 }
 // ----------- END DATEPICKER ------------------------------

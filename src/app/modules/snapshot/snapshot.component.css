@@ -1,13 +1,16 @@
- /* #piechart {     
+ #piechart {     
     width:100%;
    align-content: center;
   height: 100%;
   padding: 10px;
-} */
+  position: relative;
+}
 
  .row {
     justify-content: center;   
 }
+
+
 
 
 
