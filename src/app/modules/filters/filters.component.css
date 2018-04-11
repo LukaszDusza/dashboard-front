@@ -5,3 +5,13 @@ li {
 .row {
     justify-content: center;   
 } 
+
+input {
+    background-color: white;
+    border:thin gray solid;
+}
+
+select {
+    background-color: white;
+    border:thin gray solid;
+}

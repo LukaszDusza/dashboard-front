@@ -3,6 +3,7 @@ import { MainService } from '../../main-service.service';
 import {NgbDateStruct} from '@ng-bootstrap/ng-bootstrap';
 import { HttpErrorResponse } from '@angular/common/http';
 import { FiltersComponent } from '../filters';
+import { GoogleChartComponent } from 'ng2-google-charts';
 
 const now = new Date();
 
@@ -115,9 +116,7 @@ getBarChartAgreementSum(link){
                   duration: 1500,
                   easing: 'out'
                 },           
-                // chartArea: {
-                //   left:0,top:0,width:'100%',height:'100%'
-                // },
+                chartArea: {top: 20,width: 300, height: 300},
                   legend: {
                    position: 'top'
                   },
@@ -188,9 +187,7 @@ getBarChartSalesSum(link){
                   easing: 'out',
                   
                 },           
-                // chartArea: {
-                //   left:0,top:0,width:'100%',height:'100%'
-                // },
+                chartArea: {top: 20,width: 300, height: 300},
                   legend: {
                    position: 'top'
                   },
@@ -244,9 +241,7 @@ getPieChart9(link, firstHeader, secondHeader){
               chartType: "PieChart",
                 dataTable: array,     
                 options: {            
-                  // chartArea: {
-                  //   left:0,top:0,width:'100%',height:'100%'
-                  // },
+                  chartArea: {top: 20,width: 300, height: 300},
                     legend: {
                      position: 'right'
                     },
@@ -302,9 +297,7 @@ getPieChart10(link, firstHeader, secondHeader){
               chartType: "PieChart",
                 dataTable: array,     
                 options: {            
-                  // chartArea: {
-                  //   left:0,top:0,width:'100%',height:'100%'
-                  // },
+                  chartArea: {top: 20,width: 300, height: 300},
                     legend: {
                      position: 'right'
                     },
@@ -440,9 +433,7 @@ array.push([
       dataTable: array,     
       options: {  
                   
-        // chartArea: {
-        //   left:0,top:0,width:'100%',height:'100%'
-        // },
+        chartArea: {top: 20,width: 300, height: 300},
           legend: {
            position: 'none'
           },
@@ -462,9 +453,7 @@ array.push([
             duration: 1500,
             easing: 'out'
           },           
-          // chartArea: {
-          //   left:0,top:0,width:'100%',height:'100%'
-          // },
+          chartArea: {top: 20,width: 300, height: 300},
             legend: {
              position: 'top'
             },
@@ -484,11 +473,9 @@ array.push([
               duration: 1500,
               easing: 'out'
             },           
-            // chartArea: {
-            //   left:0,top:0,width:'100%',height:'100%'
-            // },
+            chartArea: {top: 20,width: 300, height: 300},
               legend: {
-               position: 'top'
+               position: 'right'
               },
               tooltip: {
                 isHtml: true,
@@ -505,12 +492,11 @@ array.push([
                 startup: true,
                 duration: 1500,
                 easing: 'out'
-              },      
-              // chartArea: {
-              //   left:0,top:0,width:'100%',height:'100%'
-              // },
+              },  
+              chartArea: {top: 20,width: 300, height: 300},
+              
                 legend: {
-                 position: 'top'
+                 position: 'right'
                 },
                 tooltip: {
                   isHtml: true,
@@ -528,9 +514,7 @@ array.push([
                   duration: 1500,
                   easing: 'out'
                 },           
-                // chartArea: {
-                //   left:0,top:0,width:'100%',height:'100%'
-                // },
+                chartArea: {top: 20,width: 300, height: 300},
                   legend: {
                    position: 'top'
                   },
@@ -545,9 +529,7 @@ array.push([
                 chartType: "PieChart",
                 dataTable: array,     
                 options: {            
-                  // chartArea: {
-                  //   left:0,top:0,width:'100%',height:'100%'
-                  // },
+                  chartArea: {top: 20,width: 300, height: 300},
                     legend: {
                      position: 'right'
                     },
@@ -566,23 +548,23 @@ array.push([
 chart7BarChart(array){
   this.chart7 = {
     chartType: "BarChart",
-    dataTable: array,     
-    options: { 
+    dataTable: array, 
+      
+    options: {
+      chartArea: {top: 20,width: 300, height: 300},
+              
       animation: {
         startup: true,
         duration: 1500,
         easing: 'out'
-      },           
-      // chartArea: {
-      //   left:0,top:0,width:'100%',height:'100%'
-      // },
+      },                 
         legend: {
          position: 'top'
         },
         tooltip: {
           isHtml: true,
           trigger: 'selection',        
-        },                      
+        },                                 
       }
     }
 }
