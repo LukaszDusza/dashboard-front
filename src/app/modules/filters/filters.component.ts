@@ -1,7 +1,7 @@
 import { Component, OnInit, SimpleChanges, Input, OnChanges } from '@angular/core';
-import {NgbDateStruct} from '@ng-bootstrap/ng-bootstrap';
-import { FormGroup, FormControl, FormArray } from '@angular/forms';
 import { MainService } from '../../main-service.service';
+import { FormGroup, FormControl, FormArray } from '@angular/forms';
+import {NgbDateStruct} from '@ng-bootstrap/ng-bootstrap';
 
 const now = new Date();
 

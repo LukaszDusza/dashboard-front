@@ -32,7 +32,7 @@ endpoint = {
 default = "2017-4-2/2018-4-2/umowa";
 //---------------- END HOST ---------------------------------------------------
 
-private link = new Subject<string>();
+private link = new Subject<string>(); //search date provider
 link$ = this.link.asObservable();
 
 updateLinks(linkUp: string) {
@@ -57,6 +57,10 @@ updateLinks(linkUp: string) {
           let result = this.http.get<Array<RaportDas>>(endpointLink);     
           return result;
         } 
+
+        getRaportDasAll(): Observable<Array<RaportDas>> {                                              
+          return this.http.get<Array<RaportDas>>(this.swichHost + this.endpoint.allData);
+          }
 }
 
 export interface RaportDas {

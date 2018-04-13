@@ -15,6 +15,7 @@ import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
         FormsModule,
         ReactiveFormsModule,
         NgbModule,
+        //Filters2ndModule
      //   Ng2GoogleChartsModule
            
     ],

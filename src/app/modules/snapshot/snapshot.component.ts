@@ -13,7 +13,8 @@ const now = new Date();
   styleUrls: ['./snapshot.component.css']
 })
 export class SnapshotComponent implements OnInit {
-
+  showLoader : boolean;
+  
   constructor(private mainService?: MainService) {
 
 
@@ -325,13 +326,13 @@ getPieChart10(link, firstHeader, secondHeader){
                
 array.push([ 
  // elem.kanalDystrybucji,
-//  elem.nazwaSektoraSprzedazy,
+  elem.nazwaSektoraSprzedazy,
 //  elem.dyrektorSektora,
 //  elem.segmentSprzedazy,
 //  elem.drEkspertSegmentu,
 //  elem.miasto,
 //  elem.mzaKierownikZespolu,
-  elem.nazwaAgenta,
+//  elem.nazwaAgenta,
 //  elem.nrWewnAgenta,
 //  elem.nrKnfAgenta,
  // elem.uzytkownik,
@@ -369,13 +370,13 @@ array.push([
       });
       array.unshift([
         // "Kanał dystrybucji",
-        // "Nazwa sektora sprzedazy",
+         "Nazwa sektora sprzedazy",
         // "Dyrektor sektora",
         // "Segment sprzedazy",
         // "Dyrektor/Ekspert segmentu",
         // "Miasto",
         // "MZA Kierownik Zespolu",
-         "Nazwa agenta",
+        // "Nazwa agenta",
         // "Numer wewn. Agenta",
         // "Numer KNF Agenta",
         // "Użytkownik",
