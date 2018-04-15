@@ -7,4 +7,6 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
  
+//  template: string ='<img src="https://loading.io/spinners/comets/lg.comet-spinner.gif"/>';
+
 }

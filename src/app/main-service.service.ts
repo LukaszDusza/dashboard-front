@@ -27,7 +27,8 @@ endpoint = {
   allData:"api/raportdas/all",
   byUserSum:"api/raportdas/usersum",
   byProduct:"api/raportdas/product/",
-  byPayment:"api/raportdas/payment/"
+  byPayment:"api/raportdas/payment/",
+  bySector: "api/raportdas/sector/"
 }
 default = "2017-4-2/2018-4-2/umowa";
 //---------------- END HOST ---------------------------------------------------
@@ -46,6 +47,12 @@ updateLinks(linkUp: string) {
       return result;
     }
 
+    getRaportDasBySector(link): Observable<Array<RaportDas>> {     
+      let endpointLink = this.swichHost + this.endpoint.bySector + link;  
+        let result = this.http.get<Array<RaportDas>>(endpointLink);     
+        return result;
+      }
+
     getRaportDasByProduct(link): Observable<Array<RaportDas>> { 
       let endpointLink = this.swichHost + this.endpoint.byProduct + link;  
         let result = this.http.get<Array<RaportDas>>(endpointLink);     
@@ -58,9 +65,14 @@ updateLinks(linkUp: string) {
           return result;
         } 
 
-        getRaportDasAll(): Observable<Array<RaportDas>> {                                              
+        getRaportDasAll(): Observable<Array<RaportDas>> {           
           return this.http.get<Array<RaportDas>>(this.swichHost + this.endpoint.allData);
           }
+
+          getRaport(link): Observable<Array<RaportDas>> { 
+            let endpointLink = this.swichHost + this.endpoint.byDate + link;                     
+            return this.http.get<Array<RaportDas>>(endpointLink);
+            }
 }
 
 export interface RaportDas {

@@ -4,6 +4,9 @@ import {NgbDateStruct} from '@ng-bootstrap/ng-bootstrap';
 import { HttpErrorResponse } from '@angular/common/http';
 import { FiltersComponent } from '../filters';
 import { GoogleChartComponent } from 'ng2-google-charts';
+import { PiechartComponent } from '../google-charts/piechart';
+import { Ng4LoadingSpinnerService } from 'ng4-loading-spinner';
+import { error } from 'protractor';
 
 const now = new Date();
 
@@ -14,8 +17,8 @@ const now = new Date();
 })
 export class SnapshotComponent implements OnInit {
   showLoader : boolean;
-  
-  constructor(private mainService?: MainService) {
+
+  constructor(private mainService?: MainService, private spinnerService?: Ng4LoadingSpinnerService) {
 
 
 //this.startingCharts();
@@ -28,15 +31,74 @@ this.getBarChartAgreementSum(link);
 this.getBarChartSalesSum(link);
 this.getPieChart9(link,"Nazwa Produktu", "Składka");
 this.getPieChart10(link, "Rodzaj platności", "Składka");
+this.getPieChart4(link, "Nazwa Segmentu", "skladka");
+this.getPieChart5(link, "Nazwa Segmentu", "skladka");
+this.chartService (
+  "PieChart",
+  "platnosc",
+  "SKŁADKA",
+  "kanalDystrybucji",
+  "skladka",
+  link,
+  "right",
+  0     
+);
 });
 
 }
 
+piechart: PiechartComponent;
   ngOnInit(): void { 
     this.startingCharts();
+    
   }
 
-  chart1;
+// ===================== CHART ===================================
+
+chart = [];
+
+  chartService(chartType,th1,th2,td1,td2,link,legendPos,chartIndex) {
+    this.spinnerService.show();
+    let array = [];
+    array.unshift([th1, th2]); 
+  this.mainService.getRaport(link).retry(3).subscribe( result => {
+    result.map( elem => {    
+    array.push([elem[td1], elem[td2]]);
+    });    
+  }, (err: HttpErrorResponse) => {
+    this.spinnerService.hide();    
+    console.warn(err);
+  }, () => {
+    console.log(array);
+    this.drawChart(array,chartType,legendPos,chartIndex);
+    this.spinnerService.hide();
+    }
+  )};
+  
+  drawChart(array,chartType,legendPos,chartIndex) {        
+    this.chart[chartIndex] = {
+      chartType: chartType,
+        dataTable: array,     
+        options: {            
+          chartArea: {width: 200, height: '95%'},
+            legend: {
+             position: legendPos
+            },
+            tooltip: {
+              isHtml: true,
+              trigger: 'selection',        
+            },
+            slices: {
+              1: {offset: 0.1},
+              10: {offset: 0.1},
+              9: {offset: 0.1},
+            }                          
+          }
+        } 
+  };
+// ===================== END CHART ===================================
+
+  
   chart2;
   chart3;
   chart4;
@@ -59,11 +121,14 @@ this.getBarChartAgreementSum(this.mainService.default);
 this.getBarChartSalesSum(this.mainService.default);
 this.getPieChart9("2008-4-3/2018-4-3/umowa","Nazwa Produktu", "Składka");
 this.getPieChart10("2008-4-3/2018-4-3/umowa", "Rodzaj platności", "Składka");
+this.getPieChart4("2008-4-3/2018-4-3/umowa", "Nazwa Segmentu", "skladka");
+this.getPieChart5("2008-4-3/2018-4-3/umowa", "Nazwa Segmentu", "skladka");
   }
 
 
 // ============================== chart7 ======================================
 getBarChartAgreementSum(link){
+ 
   let array = [];
   this.mainService.getRaportDasByDate(link).retry(3).subscribe(result => {
     console.log(result);
@@ -78,7 +143,7 @@ getBarChartAgreementSum(link){
                 "Liczba umów"            
                      ])     
            }, (error: HttpErrorResponse) => {
-             console.log(error.status);
+             console.log(error);
            }, () => {
              console.log(array.length);       
              if(array.length >= 2) {
@@ -117,7 +182,7 @@ getBarChartAgreementSum(link){
                   duration: 1500,
                   easing: 'out'
                 },           
-                chartArea: {top: 20,width: 300, height: 300},
+                chartArea: {width: 200, height: '85%'},
                   legend: {
                    position: 'top'
                   },
@@ -188,7 +253,7 @@ getBarChartSalesSum(link){
                   easing: 'out',
                   
                 },           
-                chartArea: {top: 20,width: 300, height: 300},
+                chartArea: {width: 200, height: '85%'},
                   legend: {
                    position: 'top'
                   },
@@ -242,7 +307,7 @@ getPieChart9(link, firstHeader, secondHeader){
               chartType: "PieChart",
                 dataTable: array,     
                 options: {            
-                  chartArea: {top: 20,width: 300, height: 300},
+                  chartArea: {width: 300, height: '95%'},
                     legend: {
                      position: 'right'
                     },
@@ -298,7 +363,7 @@ getPieChart10(link, firstHeader, secondHeader){
               chartType: "PieChart",
                 dataTable: array,     
                 options: {            
-                  chartArea: {top: 20,width: 300, height: 300},
+                  chartArea: {width: 300, height: '95%'},
                     legend: {
                      position: 'right'
                     },
@@ -316,6 +381,127 @@ getPieChart10(link, firstHeader, secondHeader){
       };     
 // ======================== END =======================================
 
+// ======================== chart4 =======================================
+getPieChart4(link, firstHeader, secondHeader){
+  
+  this.spinnerService.show();
+  console.log("getPieChart4()");
+  let array = [];  
+  this.mainService.getRaportDasBySector(link).retry(2).subscribe(result => {
+  //  console.log(result);
+    result.map(elem => {      
+      array.push([  
+        elem.segmentSprzedazy,                     
+         elem.skladka,
+               
+       ])
+             });
+             array.unshift([                         
+              firstHeader,
+              secondHeader
+                     ])     
+           }, (error: HttpErrorResponse) => {
+              console.log("getPieChart4()", error);
+              this.spinnerService.hide();
+           }, () => {
+             console.log(array);
+       
+             if(array.length >= 2) {
+               console.log(array);
+               this.showCharts = true;              
+               this.drawChart4(array);             
+               this.warningMessage = null;
+               this.spinnerService.hide();
+             } else {
+               this.showCharts = false;
+               this.warningMessage = "No results found!";
+               this.spinnerService.hide();
+             }    
+           });
+         }                 
+         drawChart4(array){        
+            this.chart4 = {
+              chartType: "PieChart",
+                dataTable: array,     
+                options: {            
+                  chartArea: {width: 300, height: '95%'},
+                    legend: {
+                     position: 'right'
+                    },
+                    tooltip: {
+                      isHtml: true,
+                      trigger: 'selection',        
+                    },
+                    slices: {
+                      1: {offset: 0.1},
+                      10: {offset: 0.1},
+                      9: {offset: 0.1},
+                    }                          
+                  }
+                } 
+      };     
+// ======================== END =======================================
+
+
+// ======================== chart5 =======================================
+getPieChart5(link, firstHeader, secondHeader){
+  this.spinnerService.show();
+  console.log("getPieChart5()");
+  let array = [];  
+  this.mainService.getRaportDasBySector(link).retry(2).subscribe(result => {
+  //  console.log(result);
+    result.map(elem => {      
+      array.push([  
+        elem.segmentSprzedazy,                     
+         elem.skladka,
+               
+       ])
+             });
+             array.unshift([                         
+              firstHeader,
+              secondHeader
+                     ])     
+           }, (error: HttpErrorResponse) => {
+              console.log("getPieChart4()", error);
+              this.spinnerService.hide();
+           }, () => {
+             console.log(array);
+       
+             if(array.length >= 2) {
+               console.log(array);
+               this.showCharts = true;              
+               this.drawChart5(array);             
+               this.warningMessage = null;
+               this.spinnerService.hide();
+             } else {
+               this.showCharts = false;
+               this.warningMessage = "No results found!";
+               this.spinnerService.hide();
+             }    
+           });
+         }                 
+         drawChart5(array){        
+            this.chart5 = {
+              chartType: "ColumnChart",
+                dataTable: array,     
+                options: {            
+                  chartArea: {width: 200, height: '85%'},
+                    legend: {
+                     position: 'top'
+                    },
+                    tooltip: {
+                      isHtml: true,
+                      trigger: 'selection',        
+                    },
+                    slices: {
+                      1: {offset: 0.1},
+                      10: {offset: 0.1},
+                      9: {offset: 0.1},
+                    }                          
+                  }
+                } 
+      };     
+// ======================== END =======================================
 
 
   getSnapshotCharts(link) {
@@ -381,7 +567,7 @@ array.push([
         // "Numer KNF Agenta",
         // "Użytkownik",
         // "Numer KNF użytkownika",
-         "Składka",
+         "Składka",       
         // "Liczba umów"
         // "id",
        // "numerKalkulacji",
@@ -419,7 +605,7 @@ array.push([
 
       if(array.length >= 2) {
         this.showCharts = true;
-        this.drawChart(array);       
+        this.drawChart1(array);       
         this.warningMessage = null;
       } else {
         this.showCharts = false;
@@ -428,23 +614,7 @@ array.push([
     });
   }
 
-  drawChart(array){
-    this.chart1 = {     
-      chartType: "PieChart",
-      dataTable: array,     
-      options: {  
-                  
-        chartArea: {top: 20,width: 300, height: 300},
-          legend: {
-           position: 'none'
-          },
-          tooltip: {
-            isHtml: true,
-            trigger: 'selection',        
-          },        
-          pieHole: 20      
-        }
-      }
+  drawChart1(array){
       this.chart2 = {
         chartType: "BarChart",
         dataTable: array,     
@@ -454,7 +624,7 @@ array.push([
             duration: 1500,
             easing: 'out'
           },           
-          chartArea: {top: 20,width: 300, height: 300},
+          chartArea: {width: 300, height: '95%'},
             legend: {
              position: 'top'
             },
@@ -474,7 +644,7 @@ array.push([
               duration: 1500,
               easing: 'out'
             },           
-            chartArea: {top: 20,width: 300, height: 300},
+            chartArea: {width: 200, height: '95%'},
               legend: {
                position: 'right'
               },
@@ -485,52 +655,31 @@ array.push([
             }
           }
 
-          this.chart4 = {
-            chartType: "PieChart",
-            dataTable: array,     
-            options: {      
-              animation: {
-                startup: true,
-                duration: 1500,
-                easing: 'out'
-              },  
-              chartArea: {top: 20,width: 300, height: 300},
+          // this.chart4 = {
+          //   chartType: "PieChart",
+          //   dataTable: array,     
+          //   options: {      
+          //     animation: {
+          //       startup: true,
+          //       duration: 1500,
+          //       easing: 'out'
+          //     },  
+          //     chartArea: {top: 20,width: 300, height: 300},
               
-                legend: {
-                 position: 'right'
-                },
-                tooltip: {
-                  isHtml: true,
-                  trigger: 'selection',        
-                },                          
-              }
-            }
-
-            this.chart5 = {
-              chartType: "ColumnChart",
-              dataTable: array,     
-              options: { 
-                animation: {
-                  startup: true,
-                  duration: 1500,
-                  easing: 'out'
-                },           
-                chartArea: {top: 20,width: 300, height: 300},
-                  legend: {
-                   position: 'top'
-                  },
-                  tooltip: {
-                    isHtml: true,
-                    trigger: 'selection',        
-                  },                          
-                }
-              }
-
+          //       legend: {
+          //        position: 'right'
+          //       },
+          //       tooltip: {
+          //         isHtml: true,
+          //         trigger: 'selection',        
+          //       },                          
+          //     }
+          //   }
               this.chart6 = {
                 chartType: "PieChart",
                 dataTable: array,     
                 options: {            
-                  chartArea: {top: 20,width: 300, height: 300},
+                  chartArea: {width: 300, height: '95%'},
                     legend: {
                      position: 'right'
                     },
@@ -549,18 +698,17 @@ array.push([
 chart7BarChart(array){
   this.chart7 = {
     chartType: "BarChart",
-    dataTable: array, 
-      
+    dataTable: array,      
     options: {
-      chartArea: {top: 20,width: 300, height: 300},
-              
+      chartArea: {width: 300, height: '95%'},     
+      
       animation: {
         startup: true,
         duration: 1500,
-        easing: 'out'
+        easing: 'out'       
       },                 
         legend: {
-         position: 'top'
+         position: 'top'                  
         },
         tooltip: {
           isHtml: true,

@@ -3,11 +3,9 @@ import { CommonModule } from "@angular/common";
 import { SnapshotComponent} from './snapshot.component';
 import { Ng2GoogleChartsModule } from 'ng2-google-charts';
 //-- BOOTSTRAP -- 
-
-
-
- import { SnapshotRoutingModule } from "../snapshot/snapshot.routing.module";
+import { SnapshotRoutingModule } from "../snapshot/snapshot.routing.module";
 import { FiltersModule } from "../filters/filters.module";
+import { PiechartModule } from "../google-charts/piechart/piechart.module";
 
 
 @NgModule({
@@ -18,7 +16,8 @@ import { FiltersModule } from "../filters/filters.module";
         CommonModule,             
         SnapshotRoutingModule,
         Ng2GoogleChartsModule,
-        FiltersModule 
+        FiltersModule,
+        PiechartModule
     ],
     exports: [
         SnapshotComponent

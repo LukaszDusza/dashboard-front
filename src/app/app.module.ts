@@ -16,6 +16,7 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 // -------END ANGULAR MATERIAL--------------
 
 // --------------- DRAWING ------------------------------
+import { Ng4LoadingSpinnerModule } from 'ng4-loading-spinner';
 import { NavigationModule } from './modules/navigation/navigation.module';
 import { SnapshotModule } from './modules/snapshot/snapshot.module';
 import { AppRoutingModule } from './app.routing.module';
@@ -37,6 +38,7 @@ import { UsersModule } from './modules/users/users.module';
     BrowserModule,
     //-- BOOTSTRAP --
     NgbModule.forRoot(),
+    Ng4LoadingSpinnerModule.forRoot(),
     FormsModule,
     ReactiveFormsModule,
     //--ANGULAR MATERIAL--   
