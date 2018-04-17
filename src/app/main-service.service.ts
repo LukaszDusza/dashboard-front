@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders} from '@angular/common/http';
 import { Observable } from 'rxjs/Observable';
 import { Subject } from 'rxjs/Subject';
 import 'rxjs/Rx';
@@ -7,7 +7,9 @@ import 'rxjs/Rx';
 import { Router } from '@angular/router';
 //import { Ng4LoadingSpinnerService } from 'ng4-loading-spinner';
 import { concat } from 'rxjs/operator/concat';
+import {environment} from '../environments/environment';
 
+const config = environment.config;
 
 @Injectable()
 export class MainService {
@@ -17,11 +19,12 @@ export class MainService {
 
 //---------------- HOST  ----------------------------------------------------------
 
-host = {
-  localhost: "http://localhost:8080/",
-  server: "http://89.67.215.18:11780/dashboard-0.0.1-SNAPSHOT/"
-}
-swichHost = this.host.server;
+// host = {
+//   localhost: "http://localhost:8080/",
+//   server: "http://89.67.215.18:11780/dashboard-0.0.1-SNAPSHOT/"
+// }
+//swichHost = this.host.localhost;
+swichHost = config.host;
 endpoint = {
   byDate:"api/raportdas/date/",
   allData:"api/raportdas/all",
@@ -73,6 +76,16 @@ updateLinks(linkUp: string) {
             let endpointLink = this.swichHost + this.endpoint.byDate + link;                     
             return this.http.get<Array<RaportDas>>(endpointLink);
             }
+
+    postRaport(raport: RaportDas): Observable<RaportDas> {
+       return this.http.post<RaportDas>(this.swichHost + this.endpoint.allData, raport);
+    }   
+    
+    
+private headers = new HttpHeaders().set('Autorization','token');
+
+
+
 }
 
 export interface RaportDas {

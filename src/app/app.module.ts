@@ -23,12 +23,16 @@ import { AppRoutingModule } from './app.routing.module';
 import { HomeModule } from './modules/home/home.module';
 import { ReportsModule } from './modules/reports/reports.module';
 import { MainService } from './main-service.service';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { ChartsModule } from './modules/charts/charts.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SalesModule } from './modules/sales/sales.module';
 import { UsersModule } from './modules/users/users.module';
+import { AutInterceptor } from './auth.interceptor';
 
+import {environment} from '../environments/environment';
+
+const config = environment.config;
 
 @NgModule({
   declarations: [
@@ -65,7 +69,14 @@ import { UsersModule } from './modules/users/users.module';
   // -- HTTP --
   
   ],
-  providers: [MainService],
+  providers: [
+    MainService,
+  {
+    provide: HTTP_INTERCEPTORS,
+    useClass: AutInterceptor,
+    multi: true,
+  }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

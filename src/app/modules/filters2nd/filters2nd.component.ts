@@ -15,9 +15,17 @@ export class Filters2ndComponent implements OnChanges,OnInit {
   constructor(private mainService?: MainService) {  }
 
   ngOnInit() { 
-    this.createForm();  
-//test
-this.businessLineService()
+  this.createForm();  
+//this.businessLineService();
+this.distributionChanelService();
+this.salesSectorService();
+    this.salesSegmentService();
+    this.salesDirectorService()
+    this.cityService();
+    this.cityOptions();
+    this.managerService();
+    this.agentService();
+
     
   }
 
@@ -67,6 +75,7 @@ this.mainService.getRaportDasAll().subscribe( result => {
   })
 })
 }
+
 businessLine = { key: [], value: [] };
 currentbusinessLine:  {key; value};
 businessLineOptions() {
@@ -82,6 +91,196 @@ businessLineOptions() {
   console.log(this.currentbusinessLine.key);
   return this.currentbusinessLine;
   }
+
+  // ----------------------------------------------------------------------------
+
+  distributionChanelService() {
+    this.distributionChanel.key.unshift("select distributionChanel"); 
+  this.mainService.getRaportDasAll().subscribe( result => {
+    result.map( elem => {   
+      this.distributionChanel.key.push(elem.kanalDystrybucji);
+      this.distributionChanel.value.push(elem.kanalDystrybucji);
+    })
+  })
+  } 
+  distributionChanel = { key: [], value: [] };
+  currentdistributionChanel:  {key; value};
+  distributionChanelOptions() {
+    let distributionChanel = this.form2nd.get('distributionChanel').value;
+  //  console.log(distributionChanel);
+    for (let i = 0; i < this.distributionChanel.key.length; i++) {
+      switch (distributionChanel) {
+        case this.distributionChanel.key[i]:
+        this.currentdistributionChanel.key = this.distributionChanel.key[i];
+        this.currentdistributionChanel.value = this.distributionChanel.value[i];
+        
+      }
+    }
+  //  console.log(this.currentdistributionChanel.key);
+    return this.currentdistributionChanel;
+    }
+// -------------------------------------------------------------------------------------
+
+salesSectorService() {
+  this.salesSector.key.unshift("select salesSector"); 
+this.mainService.getRaportDasAll().subscribe( result => {
+  result.map( elem => {   
+    this.salesSector.key.push(elem.nazwaSektoraSprzedazy);
+    this.salesSector.value.push(elem.nazwaSektoraSprzedazy);
+  })
+})
+}
+    salesSector = { key: [], value: [] };
+currentsalesSector:  {key; value};
+salesSectorOptions() {
+  let salesSector = this.form2nd.get('salesSector').value;
+ // console.log(salesSector);
+  for (let i = 0; i < this.salesSector.key.length; i++) {
+    switch (salesSector) {
+      case this.salesSector.key[i]:
+      this.currentsalesSector.key = this.salesSector.key[i];
+      this.currentsalesSector.value = this.salesSector.value[i];
+    }
+  }
+  console.log(this.currentsalesSector.key);
+  return this.currentsalesSector;
+  }
+
+//----------------------------------------------------------------------------------
+
+salesSegmentService() {
+  this.salesSegment.key.unshift("select salesSegment"); 
+this.mainService.getRaportDasAll().subscribe( result => {
+  result.map( elem => {   
+    this.salesSegment.key.push(elem.segmentSprzedazy);
+    this.salesSegment.value.push(elem.segmentSprzedazy);
+  })
+})
+}
+  salesSegment = { key: [], value: [] };
+currentsalesSegment:  {key; value};
+salesSegmentOptions() {
+  let salesSegment = this.form2nd.get('salesSegment').value;
+//  console.log(salesSegment);
+  for (let i = 0; i < this.salesSegment.key.length; i++) {
+    switch (salesSegment) {
+      case this.salesSegment.key[i]:
+      this.currentsalesSegment.key = this.salesSegment.key[i];
+      this.currentsalesSegment.value = this.salesSegment.value[i];
+    }
+  }
+  console.log(this.currentsalesSegment.key);
+  return this.currentsalesSegment;
+  }
+
+// ----------------------------------------------------------------------------
+
+salesDirectorService() {
+  this.salesDirector.key.unshift("select salesDirector"); 
+this.mainService.getRaportDasAll().subscribe( result => {
+  result.map( elem => {   
+    this.salesDirector.key.push(elem.dyrektorSektora);
+    this.salesDirector.value.push(elem.dyrektorSektora);
+  })
+})
+}
+  salesDirector = { key: [], value: [] };
+currentsalesDirector:  {key; value};
+salesDirectorOptions() {
+  let salesDirector = this.form2nd.get('salesDirector').value;
+//  console.log(salesDirector);
+  for (let i = 0; i < this.salesDirector.key.length; i++) {
+    switch (salesDirector) {
+      case this.salesDirector.key[i]:
+      this.currentsalesDirector.key = this.salesDirector.key[i];
+      this.currentsalesDirector.value = this.salesDirector.value[i];
+    }
+  }
+  console.log(this.currentsalesDirector.key);
+  return this.currentsalesDirector;
+  }
+
+// --------------------------------------------------------------------------------
+
+cityService() {
+  this.city.key.unshift("select city"); 
+this.mainService.getRaportDasAll().subscribe( result => {
+  result.map( elem => {   
+    this.city.key.push(elem.miasto);
+    this.city.value.push(elem.miasto);
+  })
+})
+}
+  city = { key: [], value: [] };
+currentcity:  {key; value};
+cityOptions() {
+  let city = this.form2nd.get('city').value;
+//  console.log(city);
+  for (let i = 0; i < this.city.key.length; i++) {
+    switch (city) {
+      case this.city.key[i]:
+      this.currentcity.key = this.city.key[i];
+      this.currentcity.value = this.city.value[i];
+    }
+  }
+//  console.log(this.currentcity.key);
+  return this.currentcity;
+  }
+
+// --------------------------------------------------------------------------------
+
+managerService() {
+  this.manager.key.unshift("select manager"); 
+this.mainService.getRaportDasAll().subscribe( result => {
+  result.map( elem => {   
+    this.manager.key.push(elem.mzaKierownikZespolu);
+    this.manager.value.push(elem.mzaKierownikZespolu);
+  })
+})
+}
+  manager = { key: [], value: [] };
+currentmanager:  {key; value};
+managerOptions() {
+  let manager = this.form2nd.get('manager').value;
+ // console.log(manager);
+  for (let i = 0; i < this.manager.key.length; i++) {
+    switch (manager) {
+      case this.manager.key[i]:
+      this.currentmanager.key = this.manager.key[i];
+      this.currentmanager.value = this.manager.value[i];
+    }
+  }
+  console.log(this.currentmanager.key);
+  return this.currentmanager;
+  }
+
+  // --------------------------------------------------------------------------------
+
+  agentService() {
+  this.agent.key.unshift("select agent"); 
+this.mainService.getRaportDasAll().subscribe( result => {
+  result.map( elem => {   
+    this.agent.key.push(elem.nazwaAgenta);
+    this.agent.value.push(elem.nazwaAgenta);
+  })
+})
+}
+  agent = { key: [], value: [] };
+currentagent:  {key; value};
+agentOptions() {
+  let agent = this.form2nd.get('agent').value;
+ // console.log(agent);
+  for (let i = 0; i < this.agent.key.length; i++) {
+    switch (agent) {
+      case this.agent.key[i]:
+      this.currentagent.key = this.agent.key[i];
+      this.currentagent.value = this.agent.value[i];
+    }
+  }
+  console.log(this.currentagent.key);
+  return this.currentagent;
+  }
+
 //------------------------ END SELECTOR BUSINESS LINE ---------------------------
 
 timerange = {

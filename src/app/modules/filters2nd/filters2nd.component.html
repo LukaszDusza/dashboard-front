@@ -3,15 +3,10 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-faded" id="navbar">
   <div class="navbar-collapse">
     <ul class="navbar-nav mr-auto">
-            <form [formGroup]="form2nd" class="form-inline" >
+<form [formGroup]="form2nd" class="form-inline" >
 <li> 
   <select class="form-control-sm" id="agreement" formControlName="agreement" (change)= "onChangeAgreementOptions()">
       <option *ngFor="let agreement of agreement.title" [value]="agreement">{{agreement}}</option>      
-  </select>
-</li>
-<li> 
-  <select class="form-control-sm" id="businessLine" formControlName="businessLine" (change)= "businessLineOptions()">
-      <option *ngFor="let businessLine of businessLine.key" [value]="businessLine">{{businessLine}}</option>      
   </select>
 </li>
 <li>
@@ -19,6 +14,53 @@
     <option *ngFor="let time of timerange.title"  [value]="time" [disabled]="disabledField" >{{time}}</option>   
   </select>
 </li>
+<!-- <li> 
+  <select class="form-control-sm" id="businessLine" formControlName="businessLine" (change)= "businessLineOptions()">
+      <option *ngFor="let businessLine of businessLine.key" [value]="businessLine">{{businessLine}}</option>      
+  </select>
+</li> -->
+<li> 
+    <select class="form-control-sm"  formControlName="distributionChanel" (change)= "distributionChanelOptions()">
+        <option *ngFor="let distributionChanel of distributionChanel.key" [value]="distributionChanel">{{distributionChanel}}</option>      
+    </select>
+  </li>
+
+  <li> 
+      <select class="form-control-sm" id="salesSector" formControlName="salesSector" (change)= "salesSectorOptions()">
+          <option *ngFor="let salesSector of salesSector.key" [value]="salesSector">{{salesSector}}</option>      
+      </select>
+    </li>
+
+    <li> 
+        <select class="form-control-sm" id="salesSegment" formControlName="salesSegment" (change)= "salesSegmentOptions()">
+            <option *ngFor="let salesSegment of salesSegment.key" [value]="salesSegment">{{salesSegment}}</option>      
+        </select>
+      </li>
+
+      <li> 
+          <select class="form-control-sm" id="salesDirector" formControlName="salesDirector" (change)= "salesDirectorOptions()">
+              <option *ngFor="let salesDirector of salesDirector.key" [value]="salesDirector">{{salesDirector}}</option>      
+          </select>
+        </li>
+
+        <li> 
+            <select class="form-control-sm" id="city" formControlName="city" (change)= "cityOptions()">
+                <option *ngFor="let city of city.key" [value]="city">{{city}}</option>      
+            </select>
+          </li>
+
+          <li> 
+              <select class="form-control-sm" id="manager" formControlName="manager" (change)= "managerOptions()">
+                  <option *ngFor="let manager of manager.key" [value]="manager">{{manager}}</option>      
+              </select>
+            </li>
+
+            <li> 
+                <select class="form-control-sm" id="agent" formControlName="agent" (change)= "agentOptions()">
+                    <option *ngFor="let agent of agent.key" [value]="agent">{{agent}}</option>      
+                </select>
+              </li>
+
 </form>
   <form class="form-inline" (ngSubmit)="onSubmitCalendar()">
       <li>
