@@ -1,0 +1,42 @@
+<div class="container">
+  <div class="row">
+<nav class="navbar navbar-expand-lg navbar-light bg-faded" id="navbar">
+  <div class="navbar-collapse">
+    <ul class="navbar-nav mr-auto">
+            <form [formGroup]="form2nd" class="form-inline" >
+<li> 
+  <select class="form-control-sm" id="agreement" formControlName="agreement" (change)= "onChangeAgreementOptions()">
+      <option *ngFor="let agreement of agreement.title" [value]="agreement">{{agreement}}</option>      
+  </select>
+</li>
+<li> 
+  <select class="form-control-sm" id="businessLine" formControlName="businessLine" (change)= "businessLineOptions()">
+      <option *ngFor="let businessLine of businessLine.key" [value]="businessLine">{{businessLine}}</option>      
+  </select>
+</li>
+<li>
+  <select class="form-control-sm" id="timerange" formControlName="timerange">               
+    <option *ngFor="let time of timerange.title"  [value]="time" [disabled]="disabledField" >{{time}}</option>   
+  </select>
+</li>
+</form>
+  <form class="form-inline" (ngSubmit)="onSubmitCalendar()">
+      <li>
+        <input class="form-control-sm" placeholder="yyyy-mm-dd" [disabled]="disabledField"
+        name="dp1" [(ngModel)]="calendarDp1" ngbDatepicker #d1="ngbDatepicker" (click)="d1.toggle()">
+
+        <input class="form-control-sm" placeholder="yyyy-mm-dd" [disabled]="disabledField"
+        name="dp2" [(ngModel)]="calendarDp2" ngbDatepicker #d2="ngbDatepicker" (click)="d2.toggle()">                        
+</li>
+<li><button class="btn btn-sm btn-outline-primary" [disabled]="disabledField" type="submit">submit</button>
+</li>
+</form>
+    </ul>
+  </div>
+</nav>
+</div>
+<div class="row">
+ 
+</div>
+
+</div>

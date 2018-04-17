@@ -1,0 +1,1 @@
+export * from './filters2nd.component';
