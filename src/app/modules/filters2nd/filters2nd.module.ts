@@ -5,6 +5,7 @@ import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 //import { MainService } from "../../../main-service.service";
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 //import { Ng2GoogleChartsModule } from "ng2-google-charts";
+import {NgPipesModule} from 'ngx-pipes';
 
 @NgModule({
     declarations: [
@@ -16,6 +17,7 @@ import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
         ReactiveFormsModule,
         NgbModule,
      //   Ng2GoogleChartsModule
+     NgPipesModule
            
     ],
     exports: [

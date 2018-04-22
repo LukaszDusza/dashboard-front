@@ -1,14 +1,17 @@
-import { Component, OnInit, Input, SimpleChanges, OnChanges } from '@angular/core';
+import { Component, OnInit, Input, SimpleChanges, OnChanges, Pipe, PipeTransform } from '@angular/core';
 import { MainService } from '../../main-service.service';
 import { FormGroup, FormControl, FormArray } from '@angular/forms';
 import { NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 
+
 const now = new Date();
+
 
 @Component({
   selector: 'app-filters2nd',
   templateUrl: './filters2nd.component.html',
-  styleUrls: ['./filters2nd.component.css']
+  styleUrls: ['./filters2nd.component.css'],
+  providers: []
 })
 export class Filters2ndComponent implements OnChanges,OnInit {
 
@@ -16,17 +19,14 @@ export class Filters2ndComponent implements OnChanges,OnInit {
 
   ngOnInit() { 
   this.createForm();  
-//this.businessLineService();
-this.distributionChanelService();
-this.salesSectorService();
+    this.distributionChanelService();
+    this.salesSectorService();
     this.salesSegmentService();
     this.salesDirectorService()
     this.cityService();
     this.cityOptions();
     this.managerService();
-    this.agentService();
-
-    
+    this.agentService();  
   }
 
 
@@ -92,28 +92,38 @@ businessLineOptions() {
   return this.currentbusinessLine;
   }
 
-  // ----------------------------------------------------------------------------
+removeDuplicateUsingSet(arr){
+    let unique_array = Array.from(new Set(arr))
+    return unique_array
+}
 
+  // ----------------------------------------------------------------------------
+  distributionChanel = { key: [], value: [] };
   distributionChanelService() {
     this.distributionChanel.key.unshift("select distributionChanel"); 
   this.mainService.getRaportDasAll().subscribe( result => {
-    result.map( elem => {   
+    (result.map(elem => {   
       this.distributionChanel.key.push(elem.kanalDystrybucji);
-      this.distributionChanel.value.push(elem.kanalDystrybucji);
-    })
+      this.distributionChanel.value.push(elem.kanalDystrybucji);    
+    }))     
+  }, err=> {}, ()=> {
+    this.distributionChanel.key = this.removeDuplicateUsingSet(this.distributionChanel.key);
+  //  console.log(this.distributionChanel.key);
+    this.distributionChanel.value = this.removeDuplicateUsingSet(this.distributionChanel.value);
+  //  console.log(this.distributionChanel.value);
   })
   } 
-  distributionChanel = { key: [], value: [] };
+
+  
   currentdistributionChanel:  {key; value};
   distributionChanelOptions() {
     let distributionChanel = this.form2nd.get('distributionChanel').value;
-  //  console.log(distributionChanel);
+    console.log(distributionChanel);
     for (let i = 0; i < this.distributionChanel.key.length; i++) {
       switch (distributionChanel) {
         case this.distributionChanel.key[i]:
         this.currentdistributionChanel.key = this.distributionChanel.key[i];
-        this.currentdistributionChanel.value = this.distributionChanel.value[i];
-        
+        this.currentdistributionChanel.value = this.distributionChanel.value[i];       
       }
     }
   //  console.log(this.currentdistributionChanel.key);
@@ -128,6 +138,11 @@ this.mainService.getRaportDasAll().subscribe( result => {
     this.salesSector.key.push(elem.nazwaSektoraSprzedazy);
     this.salesSector.value.push(elem.nazwaSektoraSprzedazy);
   })
+}, err=> {}, ()=> {
+  this.salesSector.key = this.removeDuplicateUsingSet(this.salesSector.key);
+//  console.log(this.distributionChanel.key);
+this.salesSector.value = this.removeDuplicateUsingSet(this.salesSector.value);
+//  console.log(this.distributionChanel.value);
 })
 }
     salesSector = { key: [], value: [] };
@@ -155,6 +170,11 @@ this.mainService.getRaportDasAll().subscribe( result => {
     this.salesSegment.key.push(elem.segmentSprzedazy);
     this.salesSegment.value.push(elem.segmentSprzedazy);
   })
+}, err=> {}, ()=> {
+  this.salesSegment.key = this.removeDuplicateUsingSet(this.salesSegment.key);
+//  console.log(this.distributionChanel.key);
+this.salesSegment.value = this.removeDuplicateUsingSet( this.salesSegment.value);
+//  console.log(this.distributionChanel.value);
 })
 }
   salesSegment = { key: [], value: [] };
@@ -182,6 +202,11 @@ this.mainService.getRaportDasAll().subscribe( result => {
     this.salesDirector.key.push(elem.dyrektorSektora);
     this.salesDirector.value.push(elem.dyrektorSektora);
   })
+}, err=> {}, ()=> {
+  this.salesDirector.key = this.removeDuplicateUsingSet( this.salesDirector.key);
+//  console.log(this.distributionChanel.key);
+this.salesDirector.value = this.removeDuplicateUsingSet(  this.salesDirector.value);
+//  console.log(this.distributionChanel.value);
 })
 }
   salesDirector = { key: [], value: [] };
@@ -209,6 +234,11 @@ this.mainService.getRaportDasAll().subscribe( result => {
     this.city.key.push(elem.miasto);
     this.city.value.push(elem.miasto);
   })
+}, err=> {}, ()=> {
+  this.city.key = this.removeDuplicateUsingSet(this.city.key);
+//  console.log(this.distributionChanel.key);
+this.city.value = this.removeDuplicateUsingSet(this.city.value);
+//  console.log(this.distributionChanel.value);
 })
 }
   city = { key: [], value: [] };
@@ -236,6 +266,11 @@ this.mainService.getRaportDasAll().subscribe( result => {
     this.manager.key.push(elem.mzaKierownikZespolu);
     this.manager.value.push(elem.mzaKierownikZespolu);
   })
+}, err=> {}, ()=> {
+  this.manager.key = this.removeDuplicateUsingSet( this.manager.key);
+//  console.log(this.distributionChanel.key);
+this.manager.value = this.removeDuplicateUsingSet( this.manager.value);
+//  console.log(this.distributionChanel.value);
 })
 }
   manager = { key: [], value: [] };
@@ -263,6 +298,11 @@ this.mainService.getRaportDasAll().subscribe( result => {
     this.agent.key.push(elem.nazwaAgenta);
     this.agent.value.push(elem.nazwaAgenta);
   })
+}, err=> {}, ()=> {
+  this.agent.key = this.removeDuplicateUsingSet( this.agent.key);
+//  console.log(this.distributionChanel.key);
+this.agent.value = this.removeDuplicateUsingSet( this.agent.value);
+//  console.log(this.distributionChanel.value);
 })
 }
   agent = { key: [], value: [] };
