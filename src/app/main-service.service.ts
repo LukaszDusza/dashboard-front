@@ -31,7 +31,9 @@ endpoint = {
   byUserSum:"api/raportdas/usersum",
   byProduct:"api/raportdas/product/",
   byPayment:"api/raportdas/payment/",
-  bySector: "api/raportdas/sector/"
+  bySector: "api/raportdas/sector/",
+  bySearch:"api/raportdas/filter/",
+  byFilter: "api/raportdas/date/"
 }
 default = "2017-4-2/2018-4-2/umowa";
 //---------------- END HOST ---------------------------------------------------
@@ -46,7 +48,8 @@ updateLinks(linkUp: string) {
 
   getRaportDasByDate(link): Observable<Array<RaportDas>> {     
     let endpointLink = this.swichHost + this.endpoint.byDate + link;  
-      let result = this.http.get<Array<RaportDas>>(endpointLink);     
+      let result = this.http.get<Array<RaportDas>>(endpointLink);
+      console.log("link from mainservice", endpointLink);     
       return result;
     }
 
@@ -72,10 +75,19 @@ updateLinks(linkUp: string) {
           return this.http.get<Array<RaportDas>>(this.swichHost + this.endpoint.allData);
           }
 
+          getRaportDasSales(link): Observable<Array<RaportDas>> {           
+            return this.http.get<Array<RaportDas>>(this.swichHost + this.endpoint.byFilter);
+            }
+
           getRaport(link): Observable<Array<RaportDas>> { 
             let endpointLink = this.swichHost + this.endpoint.byDate + link;                     
             return this.http.get<Array<RaportDas>>(endpointLink);
             }
+
+            getFilters(raportType, property): Observable<Array<string>> { 
+              let endpointLink = this.swichHost + this.endpoint.bySearch + raportType + "/"+ property;                     
+              return this.http.get<Array<string>>(endpointLink);
+              }
 
     postRaport(raport: RaportDas): Observable<RaportDas> {
        return this.http.post<RaportDas>(this.swichHost + this.endpoint.allData, raport);
@@ -87,6 +99,7 @@ private headers = new HttpHeaders().set('Autorization','token');
 
 
 }
+
 
 export interface RaportDas {
     id: number;

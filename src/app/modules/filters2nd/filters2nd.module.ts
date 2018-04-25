@@ -6,6 +6,9 @@ import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 //import { Ng2GoogleChartsModule } from "ng2-google-charts";
 import {NgPipesModule} from 'ngx-pipes';
+import { ChartsModule } from "../charts/charts.module";
+import { SalesModule } from "../sales/sales.module";
+
 
 @NgModule({
     declarations: [
@@ -17,8 +20,10 @@ import {NgPipesModule} from 'ngx-pipes';
         ReactiveFormsModule,
         NgbModule,
      //   Ng2GoogleChartsModule
-     NgPipesModule
-           
+     NgPipesModule,
+     ChartsModule,
+    
+          
     ],
     exports: [
         Filters2ndComponent

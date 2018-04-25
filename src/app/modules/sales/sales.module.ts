@@ -3,6 +3,7 @@ import { SalesComponent } from "./index";
 import { CommonModule } from "@angular/common";
 import { SalesRoutingModule } from "./sales.routing.module";
 import { Filters2ndModule } from "../filters2nd/filters2nd.module";
+import { ChartsModule } from "../charts/charts.module";
 
 
 
@@ -16,7 +17,8 @@ import { Filters2ndModule } from "../filters2nd/filters2nd.module";
     imports: [
         CommonModule,
         SalesRoutingModule,
-        Filters2ndModule
+        Filters2ndModule,
+        ChartsModule
         
     ],
     exports: [

@@ -37,11 +37,6 @@ constructor(private mainService?: MainService) {
 
 
   //--------------------------- FILTERS ----------------------------------
-  //selectors: boolean = true;
- // error: boolean = true;
- // error_text = "";
-
-
 
 model;
  options = {
@@ -51,23 +46,8 @@ model;
     this.mainService.swichHost + this.mainService.endpoint.allData, 
     this.mainService.swichHost + this.mainService.endpoint.byUserSum
   ]
-};
-
- drawSelector(link: string) {
- // this.mainService.getSelectorService(this.startUplink).subscribe(result => {
-  //  this.options.title = result.map(elem => elem.title);
-  //  this.options.link = result.map(elem => elem.link);
- // }, error => {
- //   console.log("ERROR drawSelector(): " + error);
- //   this.error_text = "sorry, server not response. Please reload page";
- //   this.error = false;;
- //   this.spinner.hide();
- // }, () => {
- //   this.selectors = false;
- //   this.spinner.hide();
-//  });
-
 }
+
 //--------------------------- END FILTERS ----------------------------------
 
 
@@ -80,16 +60,7 @@ onSubmit() {
 
         this.getChartTable(link);
         this.createForm();
-        //if(link != this.link) {
-          //this.mainService.updateSnapshotChartLink(link);
-         // this.mainService.updateFlag(false);
-         
-       // } else {
-          
-          //this.mainService.updateMarketLink(link);
-          //this.mainService.updateFlag(true);
-      //  }
-        console.log(link);
+      //  console.log(link);
     }
   }
   
@@ -139,10 +110,6 @@ onSubmitCalendar() {
  }
  
 // ----------- END DATEPICKER ------------------------------
-
-
-
-
 
 
 
@@ -334,7 +301,6 @@ getSumAgreementFromTable(array) {
   console.log(arraySum);
   this.drawChartTableAgreementSum(arraySum);
 }
-
 
 
   getChartTable(link) {

@@ -31,6 +31,7 @@ import { UsersModule } from './modules/users/users.module';
 import { AutInterceptor } from './auth.interceptor';
 
 import {environment} from '../environments/environment';
+import { Filters2ndModule } from './modules/filters2nd/filters2nd.module';
 
 
 const config = environment.config;
@@ -68,6 +69,7 @@ const config = environment.config;
   //-- ROUTERS --
   AppRoutingModule,
   // -- HTTP --
+  Filters2ndModule
   
   ],
   providers: [

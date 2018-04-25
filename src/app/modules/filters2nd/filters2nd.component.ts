@@ -2,6 +2,7 @@ import { Component, OnInit, Input, SimpleChanges, OnChanges, Pipe, PipeTransform
 import { MainService } from '../../main-service.service';
 import { FormGroup, FormControl, FormArray } from '@angular/forms';
 import { NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
+import { ChartsComponent } from '../charts';
 
 
 const now = new Date();
@@ -14,8 +15,13 @@ const now = new Date();
   providers: []
 })
 export class Filters2ndComponent implements OnChanges,OnInit {
+  form2nd: FormGroup;
 
-  constructor(private mainService?: MainService) {  }
+  constructor(private mainService?: MainService) {
+    mainService.link$.subscribe( link => {
+      console.log(link);     
+      });  
+    }
 
   ngOnInit() { 
   this.createForm();  
@@ -26,9 +32,11 @@ export class Filters2ndComponent implements OnChanges,OnInit {
     this.cityService();
     this.cityOptions();
     this.managerService();
-    this.agentService();  
+    this.agentService();
+    
+    this.searchFilterService("sales", "key");
+    this.searchFilterService("sales", "value");
   }
-
 
   ngOnChanges(changes: SimpleChanges): void { }
   
@@ -38,7 +46,7 @@ disabledField:boolean = true;
 @Input()
 link: string;
 //----------------------------- FORM --------------------
-form2nd: FormGroup;
+
 createForm() {
   //first line
  this.form2nd = new FormGroup({
@@ -61,6 +69,7 @@ createForm() {
    city: new FormControl(),
    manager: new FormControl(),
    agent: new FormControl(),
+   filtersalesform: new FormControl()
  });   
 };
 //----------------------------- END FORM --------------------
@@ -189,15 +198,55 @@ salesSegmentOptions() {
       this.currentsalesSegment.value = this.salesSegment.value[i];
     }
   }
-  console.log(this.currentsalesSegment.key);
+ // console.log(this.currentsalesSegment.key);
   return this.currentsalesSegment;
   }
 
 // ----------------------------------------------------------------------------
 
+searchFilterService(raportType, property) {
+
+  if(property == "key") {
+    this.mainService.getFilters(raportType, property).subscribe( result => {
+      result.map( elem => {   
+        this.filterSales.key.push(elem);
+      })
+    }, err=> {}, ()=> {
+    //  console.log(this.filterSales.key);
+    }
+   )
+  } else if(property == "value") {
+    this.mainService.getFilters(raportType, property).subscribe( result => {
+      result.map( elem => {   
+        this.filterSales.value.push(elem);
+      })
+    }, err=> {}, ()=> {
+    //  console.log(this.filterSales.value);
+    }
+   )
+  }
+  
+  }
+  filterSales = { key: [], value: [] };
+  currentfilterSalesKey;
+  currentfilterSalesValue;
+  filterSalesOptions() {
+    let filter = this.form2nd.get('filtersalesform').value;        
+    for (let i = 0; i < this.filterSales.value.length; i++) {
+      switch (filter) {
+        case this.filterSales.value[i]:
+        console.log(this.filterSales.key[i]);        
+        this.currentfilterSalesKey = this.filterSales.key[i];
+        this.currentfilterSalesValue = this.filterSales.value[i];
+        console.log(this.currentfilterSalesKey, this.currentfilterSalesValue);
+      }
+    }
+  }
+
 salesDirectorService() {
-  this.salesDirector.key.unshift("select salesDirector"); 
+this.salesDirector.key.unshift("select salesDirector"); 
 this.mainService.getRaportDasAll().subscribe( result => {
+  //console.log(result);
   result.map( elem => {   
     this.salesDirector.key.push(elem.dyrektorSektora);
     this.salesDirector.value.push(elem.dyrektorSektora);
@@ -324,9 +373,17 @@ agentOptions() {
 //------------------------ END SELECTOR BUSINESS LINE ---------------------------
 
 timerange = {
-  title: ["today", "last week", "last month", "last year"],
+  title: [
+    "today", 
+    "last week", 
+    "last month", 
+    "last year"
+  ],
   daterange: [
-    "today", "last_week", "last_month", "last_year"      
+    "today", 
+    "last_week", 
+    "last_month", 
+    "last_year"      
   ]
 };
 
@@ -342,28 +399,20 @@ calendarDp2: NgbDateStruct;
 selectToday() {
 this.calendarDp1 = {year: now.getFullYear(), month: now.getMonth() + 1, day: now.getDate()};
 this.calendarDp2 = {year: now.getFullYear(), month: now.getMonth() + 1, day: now.getDate()};
-console.log("selectToday")
+//console.log("selectToday")
 }
-
-// jeszcze nie obsluzone
-// selectLastWeek() {
-//   this.calendarDp1 = {year: now.getFullYear(), month: now.getMonth() + 1, day: now.getDate()};
-//   this.calendarDp2 = {year: now.getFullYear(), month: now.getMonth() + 1, day: now.getDate()};
-//   console.log("selectLastWeek")
-// }
 
 selectLastMonth() {
 this.calendarDp1 = {year: now.getFullYear(), month: now.getMonth(), day: now.getDay() +1};
 this.calendarDp2 = {year: now.getFullYear(), month: now.getMonth() +1, day: now.getDay() +1};
-console.log("selectLastMonth")
+//console.log("selectLastMonth")
 }
 
 selectLastYear() {
 this.calendarDp1 = {year: now.getFullYear() -1, month: now.getMonth() +1, day: now.getDay() +1};
 this.calendarDp2 = {year: now.getFullYear(), month: now.getMonth() +1, day: now.getDay() +1};
-console.log("selectLastYear")
+//console.log("selectLastYear")
 }
-
 
 onSubmitCalendar() {
 let slash = "/", dateFrom, dateTo, link;
@@ -376,9 +425,9 @@ if(this.calendarDp1 == null && this.calendarDp2 == null ) {
     case this.timerange.daterange[0]: 
     this.selectToday();
     break;    
-    case this.timerange.daterange[1]: 
-   // this.selectLastWeek();     
-    break;
+   case this.timerange.daterange[1]: 
+  // this.selectLastWeek();     
+   break;
     case this.timerange.daterange[2]: 
     this.selectLastMonth();
     break;
@@ -389,7 +438,7 @@ if(this.calendarDp1 == null && this.calendarDp2 == null ) {
   dateFrom = this.calendarDp1.year + "-" + this.calendarDp1.month + "-" + this.calendarDp1.day;
   dateTo = this.calendarDp2.year + "-" + this.calendarDp2.month + "-" + this.calendarDp2.day;
  // this.link = this.mainService.swichHost + this.mainService.endpoint.byDate + dateFrom + slash + dateTo + slash + agreementSelection;
-  this.link = dateFrom + slash + dateTo + slash + agreementSelection;
+  this.link = dateFrom + slash + dateTo + slash   + agreementSelection + slash + this.currentfilterSalesKey;
 
   this.calendarDp1 = null;
   this.calendarDp2 = null;
@@ -399,7 +448,7 @@ this.mainService.updateLinks(this.link);
 } else {
 dateFrom = this.calendarDp1.year + "-" + this.calendarDp1.month + "-" + this.calendarDp1.day;
 dateTo = this.calendarDp2.year + "-" + this.calendarDp2.month + "-" + this.calendarDp2.day;    
-this.link = dateFrom + slash + dateTo + slash + agreementSelection;
+this.link = dateFrom + slash + dateTo  + slash + agreementSelection + slash + this.currentfilterSalesKey;
 console.log(link);
 this.mainService.updateLinks(this.link);
 }
@@ -408,7 +457,7 @@ this.mainService.updateLinks(this.link);
 
 onChangeAgreementOptions() {
 this.disabledField = false;
-console.log("onChangeAgreementOptions()");
+// console.log("onChangeAgreementOptions()");
 }
 
 agreementOptions() {

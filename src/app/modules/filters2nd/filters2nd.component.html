@@ -19,7 +19,14 @@
       <option *ngFor="let businessLine of businessLine.key" [value]="businessLine">{{businessLine}}</option>      
   </select>
 </li> -->
+
 <li> 
+    <select class="form-control-sm"  formControlName="filtersalesform" (change)= "filterSalesOptions()">
+        <option *ngFor="let filter of filterSales.value">{{filter}}</option>      
+    </select>
+  </li>
+
+<!-- <li> 
     <select class="form-control-sm"  formControlName="distributionChanel" (change)= "distributionChanelOptions()">
         <option *ngFor="let distributionChanel of distributionChanel.key" [value]="distributionChanel">{{distributionChanel}}</option>      
     </select>
@@ -59,7 +66,7 @@
                 <select class="form-control-sm" id="agent" formControlName="agent" (change)= "agentOptions()">
                     <option *ngFor="let agent of agent.key" [value]="agent">{{agent}}</option>      
                 </select>
-              </li>
+              </li> -->
 
 </form>
 
@@ -78,6 +85,5 @@
   </div>
 </nav>
 </div>
-
 
 </div>

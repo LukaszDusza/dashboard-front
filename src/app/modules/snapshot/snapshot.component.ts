@@ -69,7 +69,7 @@ chart = [];
     this.spinnerService.hide();    
     console.warn(err);
   }, () => {
-    console.log(array);
+  //  console.log(array);
     this.drawChart(array,chartType,legendPos,chartIndex);
     this.spinnerService.hide();
     }
@@ -131,7 +131,7 @@ getBarChartAgreementSum(link){
  
   let array = [];
   this.mainService.getRaportDasByDate(link).retry(3).subscribe(result => {
-    console.log(result);
+  //  console.log(result);
     result.map(elem => { 
       array.push([
         "",       
@@ -143,11 +143,11 @@ getBarChartAgreementSum(link){
                 "Liczba umów"            
                      ])     
            }, (error: HttpErrorResponse) => {
-             console.log(error);
+          //   console.log(error);
            }, () => {
-             console.log(array.length);       
+          //   console.log(array.length);       
              if(array.length >= 2) {
-               console.log(array);
+            //   console.log(array);
                this.showCharts = true;
                this.getSumAgreementFromTable(array);
                //this.drawBarChartBySumAgreement(array);       
@@ -168,8 +168,8 @@ getBarChartAgreementSum(link){
            let arraySum = [];
            arraySum.push(["",this.totalSales]);
            arraySum.unshift(["","LICZBA UMÓW"]);
-           console.log(this.totalSales);
-           console.log(arraySum);
+        //   console.log(this.totalSales);
+        //   console.log(arraySum);
            this.drawBarChartBySumAgreement(arraySum);
          }
          drawBarChartBySumAgreement(array){        
@@ -200,7 +200,7 @@ getBarChartAgreementSum(link){
 getBarChartSalesSum(link){
   let array = [];
   this.mainService.getRaportDasByDate(link).retry(3).subscribe(result => {
-    console.log(result);
+  //  console.log(result);
     result.map(elem => { 
       array.push([
         "",       
@@ -213,12 +213,12 @@ getBarChartSalesSum(link){
                      ])
        
            }, (error: HttpErrorResponse) => {
-             console.log(error.status);
+         //    console.log(error.status);
            }, () => {
-             console.log(array.length);
+          //   console.log(array.length);
        
              if(array.length >= 2) {
-               console.log(array);
+            //   console.log(array);
                this.showCharts = true;
                this.getSumSales(array);                     
                this.warningMessage = null;
@@ -272,7 +272,7 @@ getBarChartSalesSum(link){
 
 // ======================== chart9 =======================================
 getPieChart9(link, firstHeader, secondHeader){
-  console.log("getPieChart9()");
+//  console.log("getPieChart9()");
   let array = [];  
   this.mainService.getRaportDasByProduct(link).retry(2).subscribe(result => {
   //  console.log(result);
@@ -287,12 +287,12 @@ getPieChart9(link, firstHeader, secondHeader){
               secondHeader
                      ])     
            }, (error: HttpErrorResponse) => {
-              console.log("getPieChart()", error.status);
+           //   console.log("getPieChart()", error.status);
            }, () => {
-             console.log("array lenth",array.length);
+          //   console.log("array lenth",array.length);
        
              if(array.length >= 2) {
-               console.log(array);
+            //   console.log(array);
                this.showCharts = true;              
                this.drawChart9(array);             
                this.warningMessage = null;
@@ -328,7 +328,7 @@ getPieChart9(link, firstHeader, secondHeader){
 
 // ======================== chart10 =======================================
 getPieChart10(link, firstHeader, secondHeader){
-  console.log("getPieChart10()");
+//  console.log("getPieChart10()");
   let array = [];  
   this.mainService.getRaportDasByPayment(link).retry(2).subscribe(result => {
   //  console.log(result);
@@ -343,12 +343,12 @@ getPieChart10(link, firstHeader, secondHeader){
               secondHeader
                      ])     
            }, (error: HttpErrorResponse) => {
-              console.log("getPieChart()", error.status);
+            //  console.log("getPieChart()", error.status);
            }, () => {
-             console.log("array lenth",array.length);
+          //   console.log("array lenth",array.length);
        
              if(array.length >= 2) {
-               console.log(array);
+           //    console.log(array);
                this.showCharts = true;              
                this.drawChart10(array);             
                this.warningMessage = null;
@@ -385,7 +385,7 @@ getPieChart10(link, firstHeader, secondHeader){
 getPieChart4(link, firstHeader, secondHeader){
   
   this.spinnerService.show();
-  console.log("getPieChart4()");
+//  console.log("getPieChart4()");
   let array = [];  
   this.mainService.getRaportDasBySector(link).retry(2).subscribe(result => {
   //  console.log(result);
@@ -401,13 +401,13 @@ getPieChart4(link, firstHeader, secondHeader){
               secondHeader
                      ])     
            }, (error: HttpErrorResponse) => {
-              console.log("getPieChart4()", error);
+          //    console.log("getPieChart4()", error);
               this.spinnerService.hide();
            }, () => {
-             console.log(array);
+          //   console.log(array);
        
              if(array.length >= 2) {
-               console.log(array);
+            //   console.log(array);
                this.showCharts = true;              
                this.drawChart4(array);             
                this.warningMessage = null;
@@ -446,7 +446,7 @@ getPieChart4(link, firstHeader, secondHeader){
 // ======================== chart5 =======================================
 getPieChart5(link, firstHeader, secondHeader){
   this.spinnerService.show();
-  console.log("getPieChart5()");
+//  console.log("getPieChart5()");
   let array = [];  
   this.mainService.getRaportDasBySector(link).retry(2).subscribe(result => {
   //  console.log(result);
@@ -462,13 +462,13 @@ getPieChart5(link, firstHeader, secondHeader){
               secondHeader
                      ])     
            }, (error: HttpErrorResponse) => {
-              console.log("getPieChart4()", error);
+           //   console.log("getPieChart4()", error);
               this.spinnerService.hide();
            }, () => {
              console.log(array);
        
              if(array.length >= 2) {
-               console.log(array);
+            //   console.log(array);
                this.showCharts = true;              
                this.drawChart5(array);             
                this.warningMessage = null;
@@ -507,7 +507,7 @@ getPieChart5(link, firstHeader, secondHeader){
   getSnapshotCharts(link) {
     let array = [];
     this.mainService.getRaportDasByDate(link).retry(3).subscribe(result => {
-      console.log(result);
+    //  console.log(result);
       result.map(elem => {  
                
 array.push([ 
@@ -599,9 +599,9 @@ array.push([
               ])
 
     }, (error: HttpErrorResponse) => {
-      console.log("getChartTable:" + error.status);
+    //  console.log("getChartTable:" + error.status);
     }, () => {
-      console.log(array.length);
+    //  console.log(array.length);
 
       if(array.length >= 2) {
         this.showCharts = true;
