@@ -25,17 +25,16 @@ export class Filters2ndComponent implements OnChanges,OnInit {
 
   ngOnInit() { 
   this.createForm();  
-    this.distributionChanelService();
-    this.salesSectorService();
-    this.salesSegmentService();
-    this.salesDirectorService()
-    this.cityService();
-    this.cityOptions();
-    this.managerService();
-    this.agentService();
-    
-    this.searchFilterService("sales", "key");
-    this.searchFilterService("sales", "value");
+  this.searchFilterService("sales", "key");
+  this.searchFilterService("sales", "value");
+  //  this.distributionChanelService();
+  //  this.salesSectorService();
+  //  this.salesSegmentService();
+  //  this.salesDirectorService()
+  //  this.cityService();
+  //  this.cityOptions();
+  //  this.managerService();
+  //  this.agentService();
   }
 
   ngOnChanges(changes: SimpleChanges): void { }
@@ -207,21 +206,23 @@ salesSegmentOptions() {
 searchFilterService(raportType, property) {
 
   if(property == "key") {
+    this.filterSales.key.unshift("wybierz opcje");
     this.mainService.getFilters(raportType, property).subscribe( result => {
       result.map( elem => {   
         this.filterSales.key.push(elem);
       })
     }, err=> {}, ()=> {
-    //  console.log(this.filterSales.key);
+      console.log(this.filterSales.key);
     }
    )
   } else if(property == "value") {
+    this.filterSales.value.unshift("wybierz opcje");
     this.mainService.getFilters(raportType, property).subscribe( result => {
       result.map( elem => {   
         this.filterSales.value.push(elem);
       })
     }, err=> {}, ()=> {
-    //  console.log(this.filterSales.value);
+      console.log(this.filterSales.value);
     }
    )
   }
@@ -438,7 +439,7 @@ if(this.calendarDp1 == null && this.calendarDp2 == null ) {
   dateFrom = this.calendarDp1.year + "-" + this.calendarDp1.month + "-" + this.calendarDp1.day;
   dateTo = this.calendarDp2.year + "-" + this.calendarDp2.month + "-" + this.calendarDp2.day;
  // this.link = this.mainService.swichHost + this.mainService.endpoint.byDate + dateFrom + slash + dateTo + slash + agreementSelection;
-  this.link = dateFrom + slash + dateTo + slash   + agreementSelection + slash + this.currentfilterSalesKey;
+  this.link = dateFrom + slash + dateTo + slash + agreementSelection + slash + this.currentfilterSalesKey;
 
   this.calendarDp1 = null;
   this.calendarDp2 = null;
@@ -458,6 +459,8 @@ this.mainService.updateLinks(this.link);
 onChangeAgreementOptions() {
 this.disabledField = false;
 // console.log("onChangeAgreementOptions()");
+//this.searchFilterService("sales", "key");
+//this.searchFilterService("sales", "value");
 }
 
 agreementOptions() {

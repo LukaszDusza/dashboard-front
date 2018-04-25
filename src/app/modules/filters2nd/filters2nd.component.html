@@ -22,7 +22,7 @@
 
 <li> 
     <select class="form-control-sm"  formControlName="filtersalesform" (change)= "filterSalesOptions()">
-        <option *ngFor="let filter of filterSales.value">{{filter}}</option>      
+        <option *ngFor="let filter of filterSales.value" [disabled]="disabledField">{{filter}}</option>      
     </select>
   </li>
 

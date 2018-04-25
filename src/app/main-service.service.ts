@@ -33,7 +33,8 @@ endpoint = {
   byPayment:"api/raportdas/payment/",
   bySector: "api/raportdas/sector/",
   bySearch:"api/raportdas/filter/",
-  byFilter: "api/raportdas/date/"
+  byFilter: "api/raportdas/date/",
+  byXXX: "api/raportdas/sales/"
 }
 default = "2017-4-2/2018-4-2/umowa";
 //---------------- END HOST ---------------------------------------------------
@@ -43,11 +44,12 @@ link$ = this.link.asObservable();
 
 updateLinks(linkUp: string) {
   this.link.next(linkUp);
- console.log(linkUp);
+// console.log(linkUp);
 }
 
   getRaportDasByDate(link): Observable<Array<RaportDas>> {     
-    let endpointLink = this.swichHost + this.endpoint.byDate + link;  
+    let endpointLink = this.swichHost + this.endpoint.byDate + link;
+  //  let cumstomLink = this.swichHost + this.endpoint.bySales + link;
       let result = this.http.get<Array<RaportDas>>(endpointLink);
       console.log("link from mainservice", endpointLink);     
       return result;

@@ -17,7 +17,7 @@ export class ChartsComponent implements OnInit {
 constructor(private mainService?: MainService) {
 
   mainService.link$.subscribe( link => {
-    console.log(link);
+  //  console.log(link);
       this.getChartTable(link);
     });
  }
@@ -59,7 +59,7 @@ onSubmit() {
         let link = this.options.link[i];
 
         this.getChartTable(link);
-        this.createForm();
+      //  this.createForm();
       //  console.log(link);
     }
   }
@@ -98,12 +98,12 @@ onSubmitCalendar() {
     dateTo = "9999-01-01";
     link = this.mainService.swichHost + this.mainService.endpoint.byDate + dateFrom + slash + dateTo + slash + this.model;
     this.getChartTable(link);
-    console.log(link);
+  //  console.log(link);
   } else {
     dateFrom = this.calendarDp1.year + "-" + this.calendarDp1.month + "-" + this.calendarDp1.day;
     dateTo = this.calendarDp2.year + "-" + this.calendarDp2.month + "-" + this.calendarDp2.day;    
     link = this.mainService.swichHost + this.mainService.endpoint.byDate + dateFrom + slash + dateTo + slash + this.model;   
-  console.log(link);
+//  console.log(link);
 
   this.getChartTable(link);
   }
@@ -282,8 +282,8 @@ getSumFromTable(array) {
   let arraySum = [];
   arraySum.push([this.total]);
   arraySum.unshift(["SUMA"]);
-  console.log(this.total);
-  console.log(arraySum);
+//  console.log(this.total);
+//  console.log(arraySum);
   this.drawChartTableSum(arraySum);
 }
 
@@ -297,8 +297,8 @@ getSumAgreementFromTable(array) {
   let arraySum = [];
   arraySum.push([this.totalAgreement]);
   arraySum.unshift(["LICZBA UMÓW"]);
-  console.log(this.totalAgreement);
-  console.log(arraySum);
+//  console.log(this.totalAgreement);
+//  console.log(arraySum);
   this.drawChartTableAgreementSum(arraySum);
 }
 
@@ -401,7 +401,7 @@ array.push([
     }, error => {
      // console.log("getChartTable:" + error);
     }, () => {
-      console.log(array);
+    //  console.log(array);
       this.drawChartTable(array);
      this.getSumFromTable(array);
      this.getSumAgreementFromTable(array);

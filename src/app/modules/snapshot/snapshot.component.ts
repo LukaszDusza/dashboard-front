@@ -237,8 +237,8 @@ getBarChartSalesSum(link){
            let arraySum = [];
            arraySum.push(["",totalSales]);
            arraySum.unshift(["","SPRZEDAŻ"]);
-           console.log(totalSales);
-           console.log(arraySum);
+        //   console.log(totalSales);
+        //   console.log(arraySum);
            this.drawBarChartBySumSales(arraySum);
          }
 
@@ -465,7 +465,7 @@ getPieChart5(link, firstHeader, secondHeader){
            //   console.log("getPieChart4()", error);
               this.spinnerService.hide();
            }, () => {
-             console.log(array);
+          //   console.log(array);
        
              if(array.length >= 2) {
             //   console.log(array);
