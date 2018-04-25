@@ -19,14 +19,16 @@ export class Filters2ndComponent implements OnChanges,OnInit {
 
   constructor(private mainService?: MainService) {
     mainService.link$.subscribe( link => {
-      console.log(link);     
+      console.log(link);
+      this.searchFilterService("sales", "key");
+      this.searchFilterService("sales", "value");
       });  
     }
 
   ngOnInit() { 
   this.createForm();  
-  this.searchFilterService("sales", "key");
-  this.searchFilterService("sales", "value");
+ // this.searchFilterService("sales", "key");
+ // this.searchFilterService("sales", "value");
   //  this.distributionChanelService();
   //  this.salesSectorService();
   //  this.salesSegmentService();
@@ -204,24 +206,25 @@ salesSegmentOptions() {
 // ----------------------------------------------------------------------------
 
 searchFilterService(raportType, property) {
-
+  this.filterSales.key.unshift("wybierz opcje");
+  this.filterSales.value.unshift("wybierz opcje");
   if(property == "key") {
-    this.filterSales.key.unshift("wybierz opcje");
     this.mainService.getFilters(raportType, property).subscribe( result => {
-      result.map( elem => {   
+      result.map( elem => { 
+        console.log(result);  
         this.filterSales.key.push(elem);
       })
-    }, err=> {}, ()=> {
+    }, err=> {console.log(err.status)}, ()=> {
       console.log(this.filterSales.key);
     }
    )
-  } else if(property == "value") {
-    this.filterSales.value.unshift("wybierz opcje");
+  } else if(property == "value") {    
     this.mainService.getFilters(raportType, property).subscribe( result => {
-      result.map( elem => {   
+      result.map( elem => { 
+        console.log(result);   
         this.filterSales.value.push(elem);
       })
-    }, err=> {}, ()=> {
+    }, err=> {console.log(err.status)}, ()=> {
       console.log(this.filterSales.value);
     }
    )
