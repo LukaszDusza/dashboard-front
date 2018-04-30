@@ -86,9 +86,9 @@ updateLinks(linkUp: string) {
             return this.http.get<Array<RaportDas>>(endpointLink);
             }
 
-            getFilters(raportType, property): Observable<Array<string>> { 
-              let endpointLink = this.swichHost + this.endpoint.bySearch + raportType + "/"+ property;                     
-              return this.http.get<Array<string>>(endpointLink);
+            getFilters(raportType): Observable<Array<RaportDas>> { 
+              let endpointLink = this.swichHost + this.endpoint.bySearch + raportType;                     
+              return this.http.get<Array<RaportDas>>(endpointLink);
               }
 
     postRaport(raport: RaportDas): Observable<RaportDas> {
@@ -98,9 +98,9 @@ updateLinks(linkUp: string) {
     
 private headers = new HttpHeaders().set('Autorization','token');
 
-
-
 }
+
+
 
 
 export interface RaportDas {

@@ -14,14 +14,12 @@ const now = new Date();
   styleUrls: ['./filters2nd.component.css'],
   providers: []
 })
-export class Filters2ndComponent implements OnChanges,OnInit {
+export class Filters2ndComponent implements OnInit {
   form2nd: FormGroup;
 
   constructor(private mainService?: MainService) {
     mainService.link$.subscribe( link => {
-      console.log(link);
-      this.searchFilterService("sales", "key");
-      this.searchFilterService("sales", "value");
+      console.log(link);      
       });  
     }
 
@@ -39,8 +37,6 @@ export class Filters2ndComponent implements OnChanges,OnInit {
   //  this.agentService();
   }
 
-  ngOnChanges(changes: SimpleChanges): void { }
-  
 searchRange:string = null;
 disabledField:boolean = true;
 
@@ -205,33 +201,26 @@ salesSegmentOptions() {
 
 // ----------------------------------------------------------------------------
 
-searchFilterService(raportType, property) {
-  this.filterSales.key.unshift("wybierz opcje");
-  this.filterSales.value.unshift("wybierz opcje");
-  if(property == "key") {
-    this.mainService.getFilters(raportType, property).subscribe( result => {
-      result.map( elem => { 
-        console.log(result);  
-        this.filterSales.key.push(elem);
-      })
-    }, err=> {console.log(err.status)}, ()=> {
-      console.log(this.filterSales.key);
-    }
-   )
-  } else if(property == "value") {    
-    this.mainService.getFilters(raportType, property).subscribe( result => {
-      result.map( elem => { 
-        console.log(result);   
-        this.filterSales.value.push(elem);
-      })
-    }, err=> {console.log(err.status)}, ()=> {
-      console.log(this.filterSales.value);
-    }
-   )
-  }
   
-  }
-  filterSales = { key: [], value: [] };
+  filterSales = { key: [
+    "xxx",
+    "distributionchanel",
+    "salessector",
+    "salessegment",
+    "city",
+    "manager",
+    "agent",
+
+  ], value: [
+    "wybierz opcję",
+    "Kanał dystrybucji",
+    "Sektor sprzedaży",
+    "Segment sprzedaży",
+    "Miasto",
+    "Kierownik zespołu",
+    "Agent"
+  ] };
+
   currentfilterSalesKey;
   currentfilterSalesValue;
   filterSalesOptions() {
@@ -460,7 +449,10 @@ this.mainService.updateLinks(this.link);
 // ----------- END DATEPICKER ------------------------------
 
 onChangeAgreementOptions() {
-this.disabledField = false;
+  if(this.currentfilterSalesKey != this.filterSales.key[0]) {
+    this.disabledField = false;
+  }
+
 // console.log("onChangeAgreementOptions()");
 //this.searchFilterService("sales", "key");
 //this.searchFilterService("sales", "value");
