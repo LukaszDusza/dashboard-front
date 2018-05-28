@@ -2,6 +2,7 @@ import { Component, OnInit, SimpleChanges, Input, OnChanges } from '@angular/cor
 import { MainService } from '../../main-service.service';
 import { FormGroup, FormControl, FormArray } from '@angular/forms';
 import {NgbDateStruct} from '@ng-bootstrap/ng-bootstrap';
+import { ReportService } from '../../report-service.service';
 
 const now = new Date();
 
@@ -12,7 +13,7 @@ const now = new Date();
 })
 export class FiltersComponent implements OnChanges, OnInit {
 
-  constructor(private mainService?: MainService) { }
+  constructor(private mainService?: MainService, private reportService?: ReportService) { }
 
   ngOnInit(): void {
     this.createForm();
@@ -119,9 +120,19 @@ let timeSelection = this.timerangeOptions();
   this.link = dateFrom + slash + dateTo + slash + agreementSelection;
   console.log(link);
   this.mainService.updateLinks(this.link);
+  
  }
+
+ this.reportService.filter = {
+  status: this.agreement, 
+  range: timeSelection,
+  dateFrom: dateFrom,
+  dateTo: dateTo
+}
+
 }
 // ----------- END DATEPICKER ------------------------------
+
 
 onChangeAgreementOptions() {
   this.disabledField = false;
@@ -132,6 +143,7 @@ agreementOptions() {
   let agreementSelection;
   let agreement = this.form.get('agreement').value;
   console.log(agreement);
+
   for (let i = 0; i < this.agreement.title.length; i++) {
     switch (agreement) {
       case this.agreement.title[i]:
@@ -145,10 +157,11 @@ timerangeOptions() {
   let timeSelection;
   let time = this.form.get('timerange').value;
   console.log(time);
+
   for (let i = 0; i < this.timerange.title.length; i++) {
     switch (time) {
       case this.timerange.title[i]:
-       timeSelection = this.timerange.daterange[i];
+       timeSelection = this.timerange.daterange[i];    
     }
   }
   return timeSelection;

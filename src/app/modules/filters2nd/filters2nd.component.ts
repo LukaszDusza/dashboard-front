@@ -3,6 +3,7 @@ import { MainService } from '../../main-service.service';
 import { FormGroup, FormControl, FormArray } from '@angular/forms';
 import { NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 import { ChartsComponent } from '../charts';
+import { ReportService } from '../../report-service.service';
 
 
 const now = new Date();
@@ -17,7 +18,7 @@ const now = new Date();
 export class Filters2ndComponent implements OnInit {
   form2nd: FormGroup;
 
-  constructor(private mainService?: MainService) {
+  constructor(private mainService?: MainService, private reportService?: ReportService) {
     mainService.link$.subscribe( link => {
       console.log(link);      
       });  
@@ -453,6 +454,7 @@ onChangeAgreementOptions() {
     this.disabledField = false;
   }
 
+//  this.reportService.snapshotFilterArray.status = 
 // console.log("onChangeAgreementOptions()");
 //this.searchFilterService("sales", "key");
 //this.searchFilterService("sales", "value");
