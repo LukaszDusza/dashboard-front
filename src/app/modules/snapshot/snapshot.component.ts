@@ -53,6 +53,8 @@ piechart: PiechartComponent;
     
   }
 
+  
+
 // ===================== CHART ===================================
 
 chart = [];
@@ -477,6 +479,7 @@ getPieChart5(link, firstHeader, secondHeader){
                this.showCharts = false;
                this.warningMessage = "No results found!";
                this.spinnerService.hide();
+               console.log(array);
              }    
            });
          }                 

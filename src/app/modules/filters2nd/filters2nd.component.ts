@@ -21,9 +21,18 @@ export class Filters2ndComponent implements OnInit {
     mainService.link$.subscribe( link => {
       console.log(link);      
       });  
+
+      mainService.chartType$.subscribe(ch => {
+        console.log("current type chart: " + ch);
+      });
+
+      mainService.option$.subscribe( o => {
+        console.log(o);      
+        });
     }
 
   ngOnInit() { 
+
   this.createForm();  
  // this.searchFilterService("sales", "key");
  // this.searchFilterService("sales", "value");
@@ -49,6 +58,7 @@ createForm() {
  this.form2nd = new FormGroup({
    timerange: new FormControl(),  
    agreement: new FormControl(),
+   chartType: new FormControl(),
 
    //2nd line
    businessLine: new FormControl(),
@@ -71,7 +81,10 @@ createForm() {
 };
 //----------------------------- END FORM --------------------
 
-//------------------------ SELECTOR BUSINESS LINE ---------------------------
+
+
+
+//------------------------ SELECTOR BUSINESS LINE -----------
 businessLineService() {
   this.businessLine.key.unshift("select business line"); 
 this.mainService.getRaportDasAll().subscribe( result => {
@@ -201,7 +214,36 @@ salesSegmentOptions() {
 
 // ----------------------------------------------------------------------------
 
-  
+chartTypeFlag: boolean = false;
+
+chartType = { key: [
+  "xxx",
+  "charts",
+  "table"
+], value: [
+  "typ wykresu",
+  "graficzne",
+  "tabela"
+] };
+
+currentChartTypeKey;
+currentChartTypeValue;
+
+chartTypeOptions() {
+  let chartType = this.form2nd.get('chartType').value;        
+    for (let i = 0; i < this.chartType.value.length; i++) {
+      switch (chartType) {
+        case this.chartType.value[i]:
+      //  console.log(this.chartType.key[i]);        
+        this.currentChartTypeKey = this.chartType.key[i];
+        this.currentChartTypeValue = this.chartType.value[i];
+        this.mainService.updateChartType(this.currentChartTypeKey);
+        console.log(this.currentChartTypeKey, this.currentChartTypeValue);
+        
+      }
+    }
+}
+
   filterSales = { key: [
     "xxx",
     "distributionchanel",
@@ -231,6 +273,7 @@ salesSegmentOptions() {
         console.log(this.filterSales.key[i]);        
         this.currentfilterSalesKey = this.filterSales.key[i];
         this.currentfilterSalesValue = this.filterSales.value[i];
+        this.mainService.updateOption(this.currentfilterSalesKey);
         console.log(this.currentfilterSalesKey, this.currentfilterSalesValue);
       }
     }
@@ -435,8 +478,9 @@ if(this.calendarDp1 == null && this.calendarDp2 == null ) {
 
   this.calendarDp1 = null;
   this.calendarDp2 = null;
-console.log(link);
+//console.log(link);
 this.mainService.updateLinks(this.link);
+
 
 } else {
 dateFrom = this.calendarDp1.year + "-" + this.calendarDp1.month + "-" + this.calendarDp1.day;
@@ -444,8 +488,11 @@ dateTo = this.calendarDp2.year + "-" + this.calendarDp2.month + "-" + this.calen
 this.link = dateFrom + slash + dateTo  + slash + agreementSelection + slash + this.currentfilterSalesKey;
 console.log(link);
 this.mainService.updateLinks(this.link);
+
 }
 }
+
+
 // ----------- END DATEPICKER ------------------------------
 
 onChangeAgreementOptions() {

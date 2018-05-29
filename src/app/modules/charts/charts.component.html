@@ -64,16 +64,42 @@
     <!-- <hr/>
          <pre>Model: {{ calendarFrom | json}}</pre> -->
              
-<div class="row">
-    <div class="col-xs-4">
-    <div class="table"> 
-        <google-chart [data]="chart"></google-chart>
+<div class="row" *ngIf="showTable">
+    <!-- <div class="col-sm-12"> -->
+    <div class="table">
+        <google-chart [data]="table"></google-chart>
         <google-chart [data]="chartTableSum"></google-chart>
         <google-chart [data]="chartTableAgreemntSum"></google-chart>
         <!-- <div class="col-xs-4">Suma: {{total}} zł</div> -->
-      </div>
+      <!-- </div> -->
       </div>
 </div>
+
+<div class="row" *ngIf="showChart">
+
+  <div class="col-sm-4" id="chartbox">            
+    <google-chart [data]="chart1"></google-chart>            
+  </div>
+
+  <div class="col-sm-4" id="chartbox">
+    <google-chart [data]="chart2"></google-chart>
+           
+  </div>
+
+  <div class="col-sm-4" id="chartbox">
+      <google-chart [data]="chart3"></google-chart>
+  </div>
+         
+  <div class="col-sm-4" id="chartbox">
+    <google-chart [data]="chart4"></google-chart>
+  </div>
+
+  <div class="col-sm-4" id="chartbox">
+    <google-chart [data]="chart5"></google-chart>
+  </div>
+
+  <div class="col-sm-4" id="chartbox">
+    <google-chart [data]="chart6"></google-chart>
+  </div>
 </div>
-
-
+</div>

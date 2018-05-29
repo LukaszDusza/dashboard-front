@@ -2,6 +2,7 @@ import { Component, OnInit, style } from '@angular/core';
 import { MainService } from '../../main-service.service';
 import { FormGroup, FormControl, FormArray } from '@angular/forms';
 import {NgbDateStruct} from '@ng-bootstrap/ng-bootstrap';
+import { Ng4LoadingSpinnerService } from 'ng4-loading-spinner';
 
 const now = new Date();
 
@@ -11,15 +12,51 @@ const now = new Date();
   styleUrls: ['./charts.component.css']
 })
 
-
 export class ChartsComponent implements OnInit {
 
-constructor(private mainService?: MainService) {
+constructor(private mainService?: MainService, private spinnerService?: Ng4LoadingSpinnerService) {
 
   mainService.link$.subscribe( link => {
   //  console.log(link);
-      this.getChartTable(link);
+  // this.getChartTable(link);
+  this.getCharts(link);
+  
     });
+
+    mainService.chartType$.subscribe(cht => {
+      this.chartType = cht;
+    });
+
+    mainService.option$.subscribe(o => {
+      this.option = o;
+    });
+
+ }
+
+chartType;
+option;
+showChart: boolean = false;
+showTable: boolean = false;
+
+getCharts(link) {
+   switch(this.chartType) {
+
+     case "charts" :
+     this.showChart = false; 
+     this,this.showTable = false;
+     this.getChartsGraph(link, this.option);
+         
+      console.log("CHARTS");
+     break;
+
+     case "table" : 
+     this,this.showTable = false;
+     this.showChart = false;
+    // this.getChartTable(link);
+    this.getSelectionTable(link, this.option);
+    
+     break;
+   }
  }
 
   ngOnInit() {
@@ -34,6 +71,11 @@ constructor(private mainService?: MainService) {
     });   
   };
   //----------------------------- END FORM --------------------
+
+
+
+
+
 
 
   //--------------------------- FILTERS ----------------------------------
@@ -58,7 +100,8 @@ onSubmit() {
       case this.options.title[i]:
         let link = this.options.link[i];
 
-        this.getChartTable(link);
+      //  this.getChartTable(link);
+      this.getCharts(link);
       //  this.createForm();
       //  console.log(link);
     }
@@ -97,7 +140,8 @@ onSubmitCalendar() {
     dateFrom = "1900-01-01";
     dateTo = "9999-01-01";
     link = this.mainService.swichHost + this.mainService.endpoint.byDate + dateFrom + slash + dateTo + slash + this.model;
-    this.getChartTable(link);
+  //  this.getChartTable(link);
+    this.getCharts(link);
   //  console.log(link);
   } else {
     dateFrom = this.calendarDp1.year + "-" + this.calendarDp1.month + "-" + this.calendarDp1.day;
@@ -105,7 +149,8 @@ onSubmitCalendar() {
     link = this.mainService.swichHost + this.mainService.endpoint.byDate + dateFrom + slash + dateTo + slash + this.model;   
 //  console.log(link);
 
-  this.getChartTable(link);
+ // this.getChartTable(link);
+  this.getCharts(link);
   }
  }
  
@@ -115,9 +160,17 @@ onSubmitCalendar() {
 
 // ----------------------- GOOGLE CHARTS -----------------------------------------------
 
-chart;
+chart1;
+chart2;
+chart3;
+chart4;
+chart5;
+chart6;
+table;
 chartTableSum;
 chartTableAgreemntSum;
+chartsTypes = ["BarChart", "ColumnChart", "PieChart", "LineChart","BarChart"];
+
 // chartType = {
 //   table: "Table",
 //   pie: "PieChart",
@@ -276,7 +329,7 @@ chartTableAgreemntSum;
 getSumFromTable(array) {
   this.total = 0;
   for(let i = 1; i <array.length; i++ ) {
-    this.total = this.total + array[i][12];
+    this.total = this.total + array[i][1];
   //  console.log(array[i][12]);    
   }
   let arraySum = [];
@@ -291,7 +344,7 @@ totalAgreement:number;
 getSumAgreementFromTable(array) {
   this.totalAgreement = 0;
   for(let i = 1; i <array.length; i++ ) {
-    this.totalAgreement = this.totalAgreement + array[i][13];
+    this.totalAgreement = this.totalAgreement + array[i][2];
   //  console.log(array[i][12]);    
   }
   let arraySum = [];
@@ -303,7 +356,423 @@ getSumAgreementFromTable(array) {
 }
 
 
+getSelectionTable(link, option: string) {
+  this.spinnerService.show();
+  let array = [];
+  this.mainService.getRaportDasByDate(link).subscribe(result => {    
+    result.map(elem => {  
+            
+switch(option) {
+case "distributionchanel": 
+array.push([elem.kanalDystrybucji, elem.skladka, elem.numberOfContract]);
+
+break;
+
+case "salessector": 
+array.push([elem.nazwaSektoraSprzedazy, elem.skladka, elem.numberOfContract]);
+
+break;
+
+case "salessegment": 
+array.push([elem.segmentSprzedazy, elem.skladka, elem.numberOfContract]);
+
+break;
+
+case "city": 
+array.push([elem.miasto, elem.skladka, elem.numberOfContract]);
+
+break;
+
+case "manager": 
+array.push([elem.mzaKierownikZespolu, elem.skladka, elem.numberOfContract]);
+
+break;
+
+case "agent": 
+array.push([elem.nazwaAgenta, elem.skladka, elem.numberOfContract]);
+
+break;
+}
+    });
+
+    array.unshift([
+      " ",  
+       "Składka",
+       "Liczba umów"     
+            ]);
+
+  }, error => {
+   console.warn("Table:" + error);
+   this.spinnerService.hide();
+  }, () => {
+
+    console.log(array);
+   this.drawTableByType(array);
+   this.getSumFromTable(array);
+   this.getSumAgreementFromTable(array);
+   this.spinnerService.hide();
+   this.showTable = true;
+  });
+}
+
+
+
+getChartsGraph(link, option: string) {
+  this.spinnerService.show();
+    let array = [];
+    this.mainService.getRaportDasByDate(link).subscribe(result => {    
+      result.map(elem => {  
+              
+switch(option) {
+  case "distributionchanel": 
+  array.push([elem.kanalDystrybucji, elem.skladka]);
+//  array.unshift(["Kanał dystrybucji ","Skladka"]);
+  break;
+
+  case "salessector": 
+  array.push([elem.nazwaSektoraSprzedazy, elem.skladka]);
+//  array.unshift(["Sektor sprzedaży","Skladka"]);
+  break;
+
+  case "salessegment": 
+  array.push([elem.segmentSprzedazy, elem.skladka]);
+//  array.unshift(["Segment sprzedaży","Skladka"]);
+  break;
+
+  case "city": 
+  array.push([elem.miasto, elem.skladka]);
+//  array.unshift(["Miasto","Skladka"]);
+  break;
+
+  case "manager": 
+  array.push([elem.mzaKierownikZespolu, elem.skladka]);
+//  array.unshift(["Kierownik Zespołu","Skladka"]);
+  break;
+
+  case "agent": 
+  array.push([elem.nazwaAgenta, elem.skladka]);
+ // array.unshift(["Agent","Skladka"]);
+  break;
+}
+
+//array.push([ 
+//  elem.kanalDystrybucji,
+//  elem.nazwaSektoraSprzedazy,
+//  elem.dyrektorSektora,
+//  elem.segmentSprzedazy,
+//  elem.drEkspertSegmentu,
+//  elem.miasto,
+//  elem.mzaKierownikZespolu,
+//  elem.nazwaAgenta,
+//  elem.nrWewnAgenta,
+//  elem.nrKnfAgenta,
+//  elem.uzytkownik,
+//  elem.nrKnfUzytkownika,
+//    elem.skladka,
+//  elem.numberOfContract,
+  
+// elem.id,
+//elem.numerKalkulacji,
+//elem.dataKalkulacji.substring(0,10),
+//elem.numerUmowy,
+//elem.dataZawarcia.substring(0,10),
+//elem.wazneOd.substring(0,10),
+//elem.wazneDo.substring(0,10),
+//elem.nazwaProduktu,
+//elem.status,
+//elem.platnosc,
+//elem.emailUzytkownika,
+//elem.aktywny,
+//elem.zablokowany,
+//elem.poziom1,
+//elem.poziom1KNF,
+//elem.poziom2,
+//elem.poziom2KNF,
+//elem.poziom3,
+//elem.poziom3KNF,
+//elem.poziom4,
+//elem.poziom4knf,
+//elem.poziom5,
+//elem.poziom5knf,
+//elem.poziom6,
+//elem.poziom6knf,
+//lem.poziom7,
+//elem.poziom7knf
+// ])
+      });
+
+      array.unshift([
+        " ",
+      //   "Kanał dystrybucji",
+      //   "Nazwa sektora sprzedazy",
+      //   "Dyrektor sektora",
+      //   "Segment sprzedazy",
+      //   "Dyrektor/Ekspert segmentu",
+      //   "Miasto",
+      //   "MZA Kierownik Zespolu",
+      //   "Nazwa agenta",
+      //   "Numer wewn. Agenta",
+      //   "Numer KNF Agenta",
+      //   "Użytkownik",
+      //   "Numer KNF użytkownika",
+         "Składka",
+     //    "Liczba umów"
+        // "id",
+       // "numerKalkulacji",
+      //  "dataKalkulacji",
+      //  "numerUmowy",
+      //  "dataZawarcia",
+      //  "wazneOd",
+      //  "wazneDo",
+      //  "nazwaProduktu",
+      //  "status",        
+      //  "platnosc",                                  
+       // "emailUzytkownika",
+       // "aktywny",
+       // "zablokowany",
+       // "poziom1",     
+       // "poziom1KNF",
+       // "poziom2",      
+       // "poziom2KNF",
+       // "poziom3",       
+        //"poziom3KNF",
+        //"poziom4",       
+      // "poziom4knf",
+       // "poziom5",      
+       // "poziom5knf",
+       // "poziom6",        
+      //  "poziom6knf",
+       // "poziom7",       
+      //  "poziom7knf"
+              ]);
+
+    }, error => {
+     console.warn("getChartTable:" + error);
+     this.spinnerService.hide();
+    }, () => {
+
+      console.log(array);
+     this.drawChartsByType(array, this.chartsTypes);
+    // this.getSumFromTable(array);
+    // this.getSumAgreementFromTable(array);
+     this.spinnerService.hide();
+     this.showChart = true;
+    });
+
+}
+
+drawTableByType(array) {
+  this.table = {
+    chartType: "Table",
+    dataTable: array,
+    formatters: [     
+      {
+        columns: [1],
+        type: 'NumberFormat',
+        options: {
+          fractionDigits: 2, decimalSymbol: '.', groupingSymbol: ' '           
+        }
+      }       
+    ],
+    options: {      
+      width: '100%',
+      height: '100%',
+      showRowNumber: true,
+      allowHtml: true,
+     // 'title': "example", 
+      page: 'event', 
+      pageSize: 12, 
+      pagingButtons:'30',        
+      cssClassNames: {
+        headerCell: 'header',
+        tableRow: 'global',
+        oddTableRow:'global',
+        headerRow:'headerrow'
+      }
+    }
+  };
+}
+
+drawChartsByType(array, chartsTypes: string[]){
+  this.chart1 = {
+    chartType: chartsTypes[0],
+    dataTable: array,
+    formatters: [
+      // {
+      //   columns: [12],
+      //   type: 'NumberFormat',
+      //   options: {
+      //     fractionDigits: 2, decimalSymbol: '.', groupingSymbol: ' '           
+      //   }
+      // }       
+    ],
+    options: {      
+      width: '100%',
+      height: '100%',
+    //  showRowNumber: true,
+      allowHtml: true,
+     // 'title': "example", 
+    //  page: 'event', 
+    //  pageSize: 12, 
+    //  pagingButtons:'30',        
+      // cssClassNames: {
+      //   headerCell: 'header',
+      //   tableRow: 'global',
+      //   oddTableRow:'global',
+      //   headerRow:'headerrow'
+      // }
+    }
+  };
+
+  this.chart2 = {
+    chartType: chartsTypes[1],
+    dataTable: array,
+    formatters: [
+      // {
+      //   columns: [12],
+      //   type: 'NumberFormat',
+      //   options: {
+      //     fractionDigits: 2, decimalSymbol: '.', groupingSymbol: ' '           
+      //   }
+      // }       
+    ],
+    options: {      
+      width: '100%',
+      height: '100%',
+    //  showRowNumber: true,
+      allowHtml: true,
+     // 'title': "example", 
+    //  page: 'event', 
+    //  pageSize: 12, 
+    //  pagingButtons:'30',        
+      // cssClassNames: {
+      //   headerCell: 'header',
+      //   tableRow: 'global',
+      //   oddTableRow:'global',
+      //   headerRow:'headerrow'
+      // }
+    }
+  };
+  this.chart3 = {
+    chartType: chartsTypes[2],
+    dataTable: array,
+    formatters: [
+      // {
+      //   columns: [12],
+      //   type: 'NumberFormat',
+      //   options: {
+      //     fractionDigits: 2, decimalSymbol: '.', groupingSymbol: ' '           
+      //   }
+      // }       
+    ],
+    options: {      
+      width: '100%',
+      height: '100%',
+    //  showRowNumber: true,
+      allowHtml: true,
+     // 'title': "example", 
+    //  page: 'event', 
+    //  pageSize: 12, 
+    //  pagingButtons:'30',        
+      // cssClassNames: {
+      //   headerCell: 'header',
+      //   tableRow: 'global',
+      //   oddTableRow:'global',
+      //   headerRow:'headerrow'
+      // }
+    }
+  };
+  this.chart4 = {
+    chartType: chartsTypes[3],
+    dataTable: array,
+    formatters: [
+      // {
+      //   columns: [12],
+      //   type: 'NumberFormat',
+      //   options: {
+      //     fractionDigits: 2, decimalSymbol: '.', groupingSymbol: ' '           
+      //   }
+      // }       
+    ],
+    options: {      
+      width: '100%',
+      height: '100%',
+    //  showRowNumber: true,
+      allowHtml: true,
+     // 'title': "example", 
+    //  page: 'event', 
+    //  pageSize: 12, 
+    //  pagingButtons:'30',        
+      // cssClassNames: {
+      //   headerCell: 'header',
+      //   tableRow: 'global',
+      //   oddTableRow:'global',
+      //   headerRow:'headerrow'
+      // }
+    }
+  };
+  this.chart5 = {
+    chartType: chartsTypes[4],
+    dataTable: array,
+    formatters: [
+      // {
+      //   columns: [12],
+      //   type: 'NumberFormat',
+      //   options: {
+      //     fractionDigits: 2, decimalSymbol: '.', groupingSymbol: ' '           
+      //   }
+      // }       
+    ],
+    options: {      
+      width: '100%',
+      height: '100%',
+    //  showRowNumber: true,
+      allowHtml: true,
+     // 'title': "example", 
+    //  page: 'event', 
+    //  pageSize: 12, 
+    //  pagingButtons:'30',        
+      // cssClassNames: {
+      //   headerCell: 'header',
+      //   tableRow: 'global',
+      //   oddTableRow:'global',
+      //   headerRow:'headerrow'
+      // }
+    }
+  };
+  this.chart6 = {
+    chartType: chartsTypes[2],
+    dataTable: array,
+    formatters: [
+      // {
+      //   columns: [12],
+      //   type: 'NumberFormat',
+      //   options: {
+      //     fractionDigits: 2, decimalSymbol: '.', groupingSymbol: ' '           
+      //   }
+      // }       
+    ],
+    options: {      
+      width: '100%',
+      height: '100%',
+    //  showRowNumber: true,
+      allowHtml: true,
+     // 'title': "example", 
+    //  page: 'event', 
+    //  pageSize: 12, 
+    //  pagingButtons:'30',        
+      // cssClassNames: {
+      //   headerCell: 'header',
+      //   tableRow: 'global',
+      //   oddTableRow:'global',
+      //   headerRow:'headerrow'
+      // }
+    }
+  };
+}
+
   getChartTable(link) {
+   this.spinnerService.show();
     let array = [];
     this.mainService.getRaportDasByDate(link).subscribe(result => {
     //  console.log(result);
@@ -318,10 +787,10 @@ array.push([
   elem.miasto,
   elem.mzaKierownikZespolu,
   elem.nazwaAgenta,
-  elem.nrWewnAgenta,
-  elem.nrKnfAgenta,
-  elem.uzytkownik,
-  elem.nrKnfUzytkownika,
+ // elem.nrWewnAgenta,
+ // elem.nrKnfAgenta,
+ // elem.uzytkownik,
+ // elem.nrKnfUzytkownika,
   elem.skladka,
   elem.numberOfContract,
   
@@ -363,10 +832,10 @@ array.push([
          "Miasto",
          "MZA Kierownik Zespolu",
          "Nazwa agenta",
-         "Numer wewn. Agenta",
-         "Numer KNF Agenta",
-         "Użytkownik",
-         "Numer KNF użytkownika",
+        // "Numer wewn. Agenta",
+        // "Numer KNF Agenta",
+        // "Użytkownik",
+        // "Numer KNF użytkownika",
          "Składka",
          "Liczba umów"
         // "id",
@@ -399,17 +868,20 @@ array.push([
               ])
 
     }, error => {
-     // console.log("getChartTable:" + error);
+     console.warn("getChartTable:" + error);
+     this.spinnerService.hide();
     }, () => {
     //  console.log(array);
       this.drawChartTable(array);
      this.getSumFromTable(array);
      this.getSumAgreementFromTable(array);
+     this.spinnerService.hide();
+     this.showTable = true;
     });
   }
 
   drawChartTable(array){
-    this.chart = {
+    this.table = {
       chartType: "Table",
       dataTable: array,
       formatters: [
@@ -442,7 +914,7 @@ array.push([
         //   }
         // }
         {
-          columns: [12],
+          columns: [8],
           type: 'NumberFormat',
           options: {
             fractionDigits: 2, decimalSymbol: '.', groupingSymbol: ' '           

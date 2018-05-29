@@ -27,6 +27,7 @@ export class MainService {
 swichHost = config.host;
 endpoint = {
   byDate:"api/raportdas/date/",
+  
   allData:"api/raportdas/all",
   byUserSum:"api/raportdas/usersum",
   byProduct:"api/raportdas/product/",
@@ -42,9 +43,23 @@ default = "2017-4-2/2018-4-2/umowa";
 private link = new Subject<string>(); //search date provider
 link$ = this.link.asObservable();
 
+private chartType = new Subject<string>();
+chartType$ = this.chartType.asObservable();
+
+private option = new Subject<string>();
+option$ = this.option.asObservable();
+
 updateLinks(linkUp: string) {
   this.link.next(linkUp);
 // console.log(linkUp);
+}
+
+updateChartType(chartType: string){
+  this.chartType.next(chartType);
+}
+
+updateOption(option: string){
+  this.option.next(option);
 }
 
   getRaportDasByDate(link): Observable<Array<RaportDas>> {     
