@@ -32,6 +32,7 @@ import { AutInterceptor } from './auth.interceptor';
 
 import {environment} from '../environments/environment';
 import { Filters2ndModule } from './modules/filters2nd/filters2nd.module';
+import { ReportService } from './report-service.service';
 
 
 const config = environment.config;
@@ -78,7 +79,8 @@ const config = environment.config;
     provide: HTTP_INTERCEPTORS,
     useClass: AutInterceptor,
     multi: true,
-  }
+  },
+  ReportService
   ],
   bootstrap: [AppComponent]
 })

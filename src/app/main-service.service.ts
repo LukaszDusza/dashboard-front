@@ -8,13 +8,18 @@ import { Router } from '@angular/router';
 //import { Ng4LoadingSpinnerService } from 'ng4-loading-spinner';
 import { concat } from 'rxjs/operator/concat';
 import {environment} from '../environments/environment';
+import { ReportService } from './report-service.service';
+import { Ng4LoadingSpinnerService } from 'ng4-loading-spinner';
 
 const config = environment.config;
+
 
 @Injectable()
 export class MainService {
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private reportService: ReportService, private spinnerService: Ng4LoadingSpinnerService) { 
+    
+  }
 
 
 //---------------- HOST  ----------------------------------------------------------
@@ -38,6 +43,7 @@ endpoint = {
   byXXX: "api/raportdas/sales/"
 }
 default = "2017-4-2/2018-4-2/umowa";
+reportDasEndpoint = this.swichHost + this.endpoint.allData;  
 //---------------- END HOST ---------------------------------------------------
 
 private link = new Subject<string>(); //search date provider
@@ -117,9 +123,8 @@ private headers = new HttpHeaders().set('Autorization','token');
 
 
 
-
 export interface RaportDas {
-    id: number;
+      id: number;
       numerKalkulacji:number;
       dataKalkulacji: string;
       numerUmowy:number;

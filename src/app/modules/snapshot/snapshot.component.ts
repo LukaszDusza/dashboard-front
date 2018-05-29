@@ -7,6 +7,7 @@ import { GoogleChartComponent } from 'ng2-google-charts';
 import { PiechartComponent } from '../google-charts/piechart';
 import { Ng4LoadingSpinnerService } from 'ng4-loading-spinner';
 import { error } from 'protractor';
+import { ReportService } from '../../report-service.service';
 
 const now = new Date();
 
@@ -18,7 +19,7 @@ const now = new Date();
 export class SnapshotComponent implements OnInit {
   showLoader : boolean;
 
-  constructor(private mainService?: MainService, private spinnerService?: Ng4LoadingSpinnerService) {
+  constructor(private mainService?: MainService, private reportService?: ReportService, private spinnerService?: Ng4LoadingSpinnerService) {
 
 
 //this.startingCharts();
@@ -48,9 +49,15 @@ this.chartService (
 }
 
 piechart: PiechartComponent;
-  ngOnInit(): void { 
+  ngOnInit(): void {    
+     
+
     this.startingCharts();
-    
+      
+  }
+
+  ngAfterViewInit() {
+    console.log("ngAfterViewInit");
   }
 
   
@@ -118,13 +125,14 @@ chart = [];
 
   startingCharts() {
     
-this.getSnapshotCharts(this.mainService.default);
+//this.getSnapshotCharts(this.mainService.default);
 this.getBarChartAgreementSum(this.mainService.default);
 this.getBarChartSalesSum(this.mainService.default);
 this.getPieChart9("2008-4-3/2018-4-3/umowa","Nazwa Produktu", "Składka");
 this.getPieChart10("2008-4-3/2018-4-3/umowa", "Rodzaj platności", "Składka");
 this.getPieChart4("2008-4-3/2018-4-3/umowa", "Nazwa Segmentu", "skladka");
 this.getPieChart5("2008-4-3/2018-4-3/umowa", "Nazwa Segmentu", "skladka");
+
   }
 
 
@@ -132,34 +140,37 @@ this.getPieChart5("2008-4-3/2018-4-3/umowa", "Nazwa Segmentu", "skladka");
 getBarChartAgreementSum(link){
  
   let array = [];
-  this.mainService.getRaportDasByDate(link).retry(3).subscribe(result => {
-  //  console.log(result);
-    result.map(elem => { 
-      array.push([
-        "",       
-         elem.numberOfContract,        
-       ])
-             });
-             array.unshift([ 
-               "",            
-                "Liczba umów"            
-                     ])     
-           }, (error: HttpErrorResponse) => {
-          //   console.log(error);
-           }, () => {
-          //   console.log(array.length);       
-             if(array.length >= 2) {
-            //   console.log(array);
-               this.showCharts = true;
-               this.getSumAgreementFromTable(array);
-               //this.drawBarChartBySumAgreement(array);       
-               this.warningMessage = null;
+  if(this.reportService.arrayChart1.length == 0) {
+
+    this.mainService.getRaportDasByDate(link).retry(3).subscribe(result => {
+        result.map(elem => { 
+          array.push([
+            "",       
+             elem.numberOfContract,        
+           ])
+                 });
+                 array.unshift([ 
+                   "",            
+                    "Liczba umów"            
+                         ])     
+               }, (error: HttpErrorResponse) => {
+              //   console.log(error);
+               }, () => {       
+                 if(array.length >= 2) {              
+                   this.showCharts = true;
+                   this.getSumAgreementFromTable(array);                        
+                   this.warningMessage = null;
+                 } else {
+                   this.showCharts = false;
+                   this.warningMessage = "No results found!";
+                 } ;                               
+               });
              } else {
-               this.showCharts = false;
-               this.warningMessage = "No results found!";
-             }    
-           });
-         }
+              this.getSumAgreementFromTable(this.reportService.arrayChart1);
+             }
+
+  }
+  
          totalSales:number;
          getSumAgreementFromTable(array) {
            this.totalSales = 0;
